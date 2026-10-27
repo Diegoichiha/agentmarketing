@@ -58,7 +58,7 @@ h1, h2, h3, p { margin: 0; }
   transition: transform 0.15s, box-shadow 0.15s, background 0.15s, border-color 0.15s;
 }
 .tab:hover { transform: translateY(-2px); border-color: var(--t-color); box-shadow: var(--shadow); }
-.tab[data-id="agente"] { --t-color: #25A8B3; --t-on: #06304C; --t-ink: #0B7A85; } .tab[data-id="plataforma"] { --t-color: #0B79B0; --t-on: #FFFFFF; --t-ink: #0B79B0; } .tab[data-id="paquetes"] { --t-color: #FEA027; --t-on: #06304C; --t-ink: #B05A00; }
+.tab[data-id="agente"] { --t-color: #0E8390; --t-on: #FFFFFF; --t-ink: #0B7A85; } .tab[data-id="plataforma"] { --t-color: #0B79B0; --t-on: #FFFFFF; --t-ink: #0B79B0; } .tab[data-id="paquetes"] { --t-color: #B85C00; --t-on: #FFFFFF; --t-ink: #B05A00; }
 .tab .ti { width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; flex: none; background: color-mix(in srgb, var(--t-color) 20%, var(--paper)); color: var(--t-ink); }
 .tab .ti .ico { width: 24px; height: 24px; }
 .tab .tx { display: flex; flex-direction: column; min-width: 0; flex: 1; }
@@ -68,7 +68,7 @@ h1, h2, h3, p { margin: 0; }
 .tab .cnt { flex: none; font-family: var(--f-mono); font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 999px; background: var(--paper-2); color: var(--ink-2); border: 1px solid var(--line); }
 .tab[aria-selected="true"] { background: var(--t-color); border-color: var(--t-color); color: var(--t-on); box-shadow: 0 10px 24px color-mix(in srgb, var(--t-color) 38%, transparent); }
 .tab[aria-selected="true"] .ti { background: color-mix(in srgb, var(--t-on) 16%, transparent); color: var(--t-on); }
-.tab[aria-selected="true"] .num, .tab[aria-selected="true"] .sb { color: var(--t-on); opacity: 0.82; }
+.tab[aria-selected="true"] .num, .tab[aria-selected="true"] .sb { color: var(--t-on); opacity: 0.94; }
 .tab[aria-selected="true"] .cnt { background: transparent; color: var(--t-on); border-color: color-mix(in srgb, var(--t-on) 45%, transparent); }
 @media (prefers-color-scheme: dark) { .tab[data-id="agente"] { --t-ink: #25A8B3; } .tab[data-id="plataforma"] { --t-ink: #5CBDF0; } .tab[data-id="paquetes"] { --t-ink: #FEA027; } }
 .l-short { display: none; }
