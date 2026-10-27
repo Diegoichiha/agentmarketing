@@ -37,9 +37,9 @@ const ICONS = {
 
 const DATA = {
   tabs: [
-    { id: 'agente', n: '01', label: 'Agente inteligente', short: 'Agente', title: 'Todo lo que se necesita para el agente inteligente', t1: 'Todo lo que se necesita para', em: 'el agente inteligente', lead: 'Un agente por marca, que se maneja desde Telegram, trabaja con el kit de marca, recuerda lo que aprende y solo actúa hacia afuera cuando tú lo apruebas.' },
-    { id: 'plataforma', n: '02', label: 'Plataforma', short: 'Plataforma', title: 'Todo lo que se necesita para la plataforma', t1: 'Todo lo que se necesita para', em: 'la plataforma', lead: 'El servidor, las cuentas, la seguridad, los cobros y la hoja de ruta que rodean al agente para poder operarlo, cobrarlo y hacerlo crecer.' },
-    { id: 'paquetes', n: '03', label: 'Paquetes', short: 'Paquetes', title: 'Todo lo que se necesita para definir paquetes según funcionalidad', t1: 'Todo lo que se necesita para definir', em: 'paquetes según funcionalidad', lead: 'Arma cada paquete encendiendo funcionalidades y mira al instante cuánto cuesta servirlo y qué precio sugerido deja tu margen.' }
+    { id: 'agente', n: '01', label: 'Agente inteligente', short: 'Agente', icon: 'bot', sub: 'Cerebro, marca y habilidades', title: 'Todo lo que se necesita para el agente inteligente', t1: 'Todo lo que se necesita para', em: 'el agente inteligente', lead: 'Un agente por marca, que se maneja desde Telegram, trabaja con el kit de marca, recuerda lo que aprende y solo actúa hacia afuera cuando tú lo apruebas.' },
+    { id: 'plataforma', n: '02', label: 'Plataforma', short: 'Plataforma', icon: 'layers', sub: 'Servidor, costos y hoja de ruta', title: 'Todo lo que se necesita para la plataforma', t1: 'Todo lo que se necesita para', em: 'la plataforma', lead: 'El servidor, las cuentas, la seguridad, los cobros y la hoja de ruta que rodean al agente para poder operarlo, cobrarlo y hacerlo crecer.' },
+    { id: 'paquetes', n: '03', label: 'Paquetes', short: 'Paquetes', icon: 'card', sub: 'Funciones, precios y venta', title: 'Todo lo que se necesita para definir paquetes según funcionalidad', t1: 'Todo lo que se necesita para definir', em: 'paquetes según funcionalidad', lead: 'Arma cada paquete encendiendo funcionalidades y mira al instante cuánto cuesta servirlo y qué precio sugerido deja tu margen.' }
   ],
 
   nav: {

@@ -284,7 +284,7 @@
   function renderTabs() {
     $('#tabs').innerHTML = DATA.tabs.map(t => {
       const tot = DATA.todos[t.id].length, d = todoDone(t.id);
-      return `<button class="tab" role="tab" id="tab-${t.id}" data-id="${t.id}" aria-selected="${t.id === S.tab}" tabindex="${t.id === S.tab ? 0 : -1}" aria-controls="view" title="${d} de ${tot} pendientes resueltos"><span class="num">${t.n}</span><span class="lab"><span class="l-long">${esc(t.label)}</span><span class="l-short">${esc(t.short)}</span></span><span class="cnt">${d}/${tot}</span></button>`;
+      return `<button class="tab" role="tab" id="tab-${t.id}" data-id="${t.id}" aria-selected="${t.id === S.tab}" tabindex="${t.id === S.tab ? 0 : -1}" aria-controls="view" title="${d} de ${tot} pendientes resueltos"><span class="ti">${ico(t.icon)}</span><span class="tx"><span class="num">${t.n}</span><b class="lab"><span class="l-long">${esc(t.label)}</span><span class="l-short">${esc(t.short)}</span></b><small class="sb">${esc(t.sub)}</small></span><span class="cnt">${d}/${tot}</span></button>`;
     }).join('');
   }
   function renderSubnav() {
