@@ -37,15 +37,15 @@ const ICONS = {
 
 const DATA = {
   tabs: [
-    { id: 'agente', n: '01', label: 'Agente inteligente', short: 'Agente', title: 'Todo lo que se necesita para el agente inteligente', lead: 'Un agente por marca, que se maneja desde Telegram, trabaja con el kit de marca, recuerda lo que aprende y solo actúa hacia afuera cuando tú lo apruebas.' },
-    { id: 'plataforma', n: '02', label: 'Plataforma', short: 'Plataforma', title: 'Todo lo que se necesita para la plataforma', lead: 'El servidor, las cuentas, la seguridad, los cobros y la hoja de ruta que rodean al agente para poder operarlo, cobrarlo y hacerlo crecer.' },
-    { id: 'paquetes', n: '03', label: 'Paquetes', short: 'Paquetes', title: 'Todo lo que se necesita para definir paquetes según funcionalidad', lead: 'Arma cada paquete encendiendo funcionalidades y mira al instante cuánto cuesta servirlo y qué precio sugerido deja tu margen.' }
+    { id: 'agente', n: '01', label: 'Agente inteligente', short: 'Agente', title: 'Todo lo que se necesita para el agente inteligente', t1: 'Todo lo que se necesita para', em: 'el agente inteligente', lead: 'Un agente por marca, que se maneja desde Telegram, trabaja con el kit de marca, recuerda lo que aprende y solo actúa hacia afuera cuando tú lo apruebas.' },
+    { id: 'plataforma', n: '02', label: 'Plataforma', short: 'Plataforma', title: 'Todo lo que se necesita para la plataforma', t1: 'Todo lo que se necesita para', em: 'la plataforma', lead: 'El servidor, las cuentas, la seguridad, los cobros y la hoja de ruta que rodean al agente para poder operarlo, cobrarlo y hacerlo crecer.' },
+    { id: 'paquetes', n: '03', label: 'Paquetes', short: 'Paquetes', title: 'Todo lo que se necesita para definir paquetes según funcionalidad', t1: 'Todo lo que se necesita para definir', em: 'paquetes según funcionalidad', lead: 'Arma cada paquete encendiendo funcionalidades y mira al instante cuánto cuesta servirlo y qué precio sugerido deja tu margen.' }
   ],
 
   nav: {
-    agente: [['a-flujo', 'Cómo trabaja'], ['a-cerebro', 'Cerebro'], ['a-telegram', 'Telegram'], ['a-marca', 'Marca'], ['a-memoria', 'Memoria'], ['a-habilidades', 'Habilidades'], ['a-reglas', 'Reglas'], ['a-pendientes', 'Pendientes']],
-    plataforma: [['p-capas', 'Capas'], ['p-servidor', 'Servidor'], ['p-costos', 'Presupuesto'], ['p-escala', 'Muchos clientes'], ['p-cobros', 'Cobros y legal'], ['p-ruta', 'Hoja de ruta'], ['p-riesgos', 'Riesgos'], ['p-pendientes', 'Pendientes']],
-    paquetes: [['k-funciones', 'Funcionalidades'], ['k-armador', 'Armador'], ['k-venta', 'Cómo se vende'], ['k-pendientes', 'Pendientes']]
+    agente: [['a-flujo', 'Cómo trabaja'], ['a-cerebro', 'Cerebro'], ['a-telegram', 'Telegram'], ['a-marca', 'Marca'], ['a-memoria', 'Memoria'], ['a-habilidades', 'Habilidades'], ['a-reglas', 'Reglas'], ['a-pendientes', 'Pendientes'], ['a-resumen', 'Resumen']],
+    plataforma: [['p-capas', 'Capas'], ['p-servidor', 'Servidor'], ['p-costos', 'Presupuesto'], ['p-escala', 'Muchos clientes'], ['p-cobros', 'Cobros y legal'], ['p-ruta', 'Hoja de ruta'], ['p-riesgos', 'Riesgos'], ['p-pendientes', 'Pendientes'], ['p-resumen', 'Resumen']],
+    paquetes: [['k-funciones', 'Funcionalidades'], ['k-armador', 'Armador'], ['k-venta', 'Cómo se vende'], ['k-pendientes', 'Pendientes'], ['k-resumen', 'Resumen']]
   },
 
   stats: {
@@ -259,6 +259,45 @@ const DATA = {
     { icon: 'users', t: 'Incorporación', items: ['Formulario de marca y accesos', 'Crear el bot y la carpeta de marca', 'Primera semana acompañada por una persona'] }
   ],
   metrics: [['MRR', 'Ingreso recurrente mensual'], ['Churn', 'Cancelaciones'], ['CAC', 'Costo de conseguir un cliente'], ['Horas', 'Ahorradas por cliente']],
+
+  summary: {
+    agente: {
+      title: 'Lo que necesitas para crear el agente',
+      hint: 'Elige una semana para ver lo que debe estar listo. Toca una pieza para marcarla como lista.',
+      nLabel: 'componentes necesarios', costLabel: 'costo mensual aproximado', haveLabel: 'listos',
+      filter: [['0', 'Todo'], ['1', 'Semana 1'], ['2', 'Semana 2'], ['3', 'Semana 3'], ['4', 'Semana 4']],
+      items: [
+        { k: 'cerebro', icon: 'chip', t: 'Cerebro', need: 'Motor del agente y modelo Claude', tag: 'Pieza', week: 1, cost: [20, 80] },
+        { k: 'telegram', icon: 'send', t: 'Telegram', need: 'Un bot por marca', tag: 'Pieza', week: 1 },
+        { k: 'marca', icon: 'brand', t: 'Marca', need: 'Carpeta con el kit de marca', tag: 'Pieza', week: 1 },
+        { k: 'memoria', icon: 'db', t: 'Memoria', need: 'Aprendizajes guardados por marca', tag: 'Pieza', week: 1 },
+        { k: 'reglas', icon: 'shield', t: 'Reglas', need: 'Tres niveles y tope de gasto', tag: 'Pieza', week: 1 },
+        { k: 'google', icon: 'search', t: 'Investigar en Google', need: 'Búsqueda web y Search Console', tag: 'Habilidad', week: 1 },
+        { k: 'piezas', icon: 'image', t: 'Piezas de redes', need: 'Plantillas HTML y Chromium', tag: 'Habilidad', week: 2 },
+        { k: 'publicar', icon: 'share', t: 'Publicar en redes', need: 'Meta o un intermediario', tag: 'Habilidad', week: 2, cost: [13, 49] },
+        { k: 'sitios', icon: 'globe', t: 'Sitios web', need: 'Token de GitHub por repo', tag: 'Habilidad', week: 3 },
+        { k: 'correo', icon: 'mail', t: 'Correo', need: 'Cuenta Google y Resend', tag: 'Habilidad', week: 3, cost: [0, 20] },
+        { k: 'meet', icon: 'video', t: 'Reuniones de Meet', need: 'Recall.ai y Google Calendar', tag: 'Habilidad', week: 4, cost: [0, 10] }
+      ]
+    },
+    plataforma: {
+      title: 'Lo que necesitas para crear la plataforma',
+      hint: 'Separa lo del piloto de lo que viene después. Toca una pieza para marcarla como lista.',
+      nLabel: 'piezas necesarias', costLabel: 'costo fijo mensual aproximado', haveLabel: 'listas',
+      filter: [['todo', 'Todo'], ['piloto', 'Piloto'], ['despues', 'Después']],
+      items: [
+        { k: 'servidor', icon: 'server', t: 'Servidor', need: 'VPS KVM 2 de Hostinger', tag: 'Piloto', phase: 'piloto', cost: [9, 15] },
+        { k: 'cuentas', icon: 'lock', t: 'Cuentas y seguridad', need: 'Cuentas propias y claves seguras', tag: 'Piloto', phase: 'piloto' },
+        { k: 'carriles', icon: 'bot', t: 'Agentes por cliente', need: 'Un bot, una marca y una memoria por cliente', tag: 'Piloto', phase: 'piloto' },
+        { k: 'presupuesto', icon: 'dollar', t: 'Presupuesto', need: 'Aprobar el gasto mensual del piloto', tag: 'Piloto', phase: 'piloto' },
+        { k: 'supervisor', icon: 'eye', t: 'Supervisión', need: 'Una persona que revise al agente', tag: 'Piloto', phase: 'piloto' },
+        { k: 'consola', icon: 'sliders', t: 'Consola de operador', need: 'Cola de aprobaciones y registro', tag: 'Después', phase: 'despues' },
+        { k: 'portal', icon: 'users', t: 'Portal del cliente', need: 'Aprobaciones y base de datos', tag: 'Después', phase: 'despues', cost: [25, 60] },
+        { k: 'cobros', icon: 'card', t: 'Cobros', need: 'Pasarela y factura electrónica', tag: 'Después', phase: 'despues' },
+        { k: 'legal', icon: 'scale', t: 'Legal', need: 'Términos y datos personales', tag: 'Después', phase: 'despues' }
+      ]
+    }
+  },
 
   todos: {
     agente: [

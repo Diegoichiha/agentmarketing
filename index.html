@@ -4,18 +4,21 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#06304C">
 <title>Plan de Agentes</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..700&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400..600&display=swap">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Quicksand:wght@400..700&family=Red+Hat+Display:ital,wght@0,400..900;1,400..900&display=swap">
+<link rel="stylesheet" href="styles.css?v=20261027">
 </head>
 <body data-tab="agente">
 <header class="bar" id="bar">
   <div class="bar-in">
     <div class="brand">
-      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M16 3 27 9.5v13L16 29 5 22.5v-13z"/><path d="M16 3v26M5 9.5l22 13M27 9.5 5 22.5" stroke-width="1.2" opacity=".55"/></svg>
-      <div><b>Plan de Agentes</b><span>SAM Digital · confidencial</span></div>
+      <picture><source srcset="assets/logo-sam-blanco.png" media="(prefers-color-scheme: dark)"><img src="assets/logo-sam-color.png" alt="SAM Digital" width="88" height="34"></picture>
+      <span class="vr" aria-hidden="true"></span>
+      <div><b>Plan de Agentes</b><span>Documento confidencial</span></div>
     </div>
     <nav class="tabs" id="tabs" role="tablist" aria-label="Partes del plan"></nav>
   </div>
@@ -28,11 +31,11 @@
 </div>
 
 <footer class="foot">
-  <span>Documento de trabajo. Los precios son estimaciones de octubre de 2026 y se verifican antes de contratar.</span>
+  <div class="fl"><picture><source srcset="assets/logo-sam-blanco.png" media="(prefers-color-scheme: dark)"><img src="assets/logo-sam-color.png" alt="SAM Digital" width="62" height="24"></picture><span>Documento de trabajo. Los precios son estimaciones de octubre de 2026 y se verifican antes de contratar.</span></div>
   <button id="reset" type="button">Restablecer pendientes y armador</button>
 </footer>
 
-<script src="data.js"></script>
-<script src="app.js"></script>
+<script src="data.js?v=20261027"></script>
+<script src="app.js?v=20261027"></script>
 </body>
 </html>

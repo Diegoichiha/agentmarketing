@@ -13,7 +13,7 @@
 
   /* ---------- Estado (se guarda en este navegador) ---------- */
   const fresh = () => ({
-    tab: 'agente', skill: 0, layer: 2, step: 1, mem: 0, chat: 0, srv: 1, tree: 2, clients: 3,
+    tab: 'agente', sum: { agente: { week: '0', have: {} }, plataforma: { phase: 'todo', have: {} }, paquetes: { sel: null } }, skill: 0, layer: 2, step: 1, mem: 0, chat: 0, srv: 1, tree: 2, clients: 3,
     costOn: clone(DATA.costsDefault), risk: {}, checks: { agente: [], plataforma: [], paquetes: [] }, pk: clone(DATA.pkDefaults)
   });
   let S = fresh();
@@ -43,7 +43,7 @@
   /* ---------- Piezas reutilizables ---------- */
   const hero = id => {
     const t = DATA.tabs.find(x => x.id === id);
-    return `<section class="hero"><div class="big" aria-hidden="true">${t.n}</div><span class="kick">${t.n} · ${esc(t.label)}</span><h1>${esc(t.title)}</h1><p>${esc(t.lead)}</p><div class="stats">${DATA.stats[id].map(([n, l]) => `<div class="stat"><b>${n}</b><span>${esc(l)}</span></div>`).join('')}</div></section>`;
+    return `<section class="hero"><div class="big" aria-hidden="true">${t.n}</div><span class="kick">${t.n} · ${esc(t.label)}</span><h1>${esc(t.t1)} <em>${esc(t.em)}</em></h1><p>${esc(t.lead)}</p><div class="stats">${DATA.stats[id].map(([n, l]) => `<div class="stat"><b>${n}</b><span>${esc(l)}</span></div>`).join('')}</div></section>`;
   };
   const sec = (id, kick, title, body, sub) => `<section class="sec" id="${id}"><header class="sec-h"><span class="kick">${esc(kick)}</span><h2>${esc(title)}</h2>${sub ? `<p class="sub">${esc(sub)}</p>` : ''}</header>${body}</section>`;
   const comp = (name, cls = '') => `<div id="c-${name}" class="${cls}">${COMP[name]()}</div>`;
@@ -149,9 +149,43 @@
     feats: () => `<div class="grid g3" style="grid-template-columns:repeat(auto-fill,minmax(250px,1fr))">${FEATS.map(f => `<article class="card feat"><div class="ib">${ico(f.icon)}</div><h3>${esc(f.name)}</h3><p>${esc(f.ben)}</p><div class="meta"><span class="chip">Desde la semana ${f.week}</span><span class="chip">Servir: US$${f.cost[0]}–${f.cost[1]}/mes</span><span class="chip">${String(f.hrs).replace('.', ',')} h de supervisión</span></div></article>`).join('')}</div>
       <p style="margin-top:12px;font-size:12.5px;color:var(--ink-3)">Costos y horas son supuestos iniciales por marca y por mes, calculados sobre 20 piezas. Se reemplazan con lo que mida el piloto.</p>`,
 
+    sumAgente: () => sumBlock('agente'),
+    sumPlataforma: () => sumBlock('plataforma'),
+
+    sumPaquetes: () => {
+      const sel = S.sum.paquetes.sel, states = ['No incluido', 'Incluido', 'Complemento'];
+      let lo = Infinity, hi = 0;
+      const cards = [0, 1, 2].map(p => {
+        const r = calcPk(p); lo = Math.min(lo, r.pmin); hi = Math.max(hi, r.pmax);
+        const inc = FEATS.filter(f => S.pk.m[f.id][p] === 1).length, add = FEATS.filter(f => S.pk.m[f.id][p] === 2).length;
+        return `<article class="card pks"><h3>${esc(S.pk.names[p])}</h3><div class="pr">${rng(r.pmin, r.pmax)}<small style="font-size:13px;font-weight:500;color:var(--ink-3);font-family:var(--f-body)"> /mes</small></div><div class="fgrid">${FEATS.map(f => { const v = S.pk.m[f.id][p]; return `<button class="fi s${v}${sel === f.id ? ' sel' : ''}" data-act="fi" data-f="${f.id}" aria-pressed="${sel === f.id}" aria-label="${esc(f.name)}: ${states[v]}" title="${esc(f.name)}">${ico(f.icon)}</button>`; }).join('')}</div><div class="cnt2">${inc} incluidas${add ? ' · ' + add + ' complementos' : ''}</div></article>`;
+      }).join('');
+      const f = FEATS.find(x => x.id === sel);
+      const cap = f ? `<b>${esc(f.name)}</b>${[0, 1, 2].map(p => `<span class="chip${S.pk.m[f.id][p] === 1 ? ' accent' : ''}">${esc(S.pk.names[p])}: ${states[S.pk.m[f.id][p]]}</span>`).join('')}` : '<span class="sum-hint">Toca un ícono para ver esa funcionalidad en los tres paquetes.</span>';
+      const d = todoDone('paquetes'), tot = DATA.todos.paquetes.length;
+      return `<div class="sum-top"><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="chip accent">${ico('check')} Incluido</span><span class="chip" style="border-style:dashed">+ Complemento</span><span class="chip">Sin color: no incluido</span></div><span class="sum-hint">Los precios salen del armador.</span></div><div class="grid g3">${cards}</div><div class="cap" aria-live="polite">${cap}</div>
+        <div class="strip"><div><div><b>${FEATS.length}</b><span>funcionalidades en el catálogo</span></div></div><div><div><b>${rng(lo, hi)}</b><span>rango de precio sugerido al mes</span></div></div><div>${stripRing(d / tot)}<div><b>${d}/${tot}</b><span>pendientes resueltos · <a href="#k-pendientes">ver</a></span></div></div></div>`;
+    },
+
     sell: () => `<div class="grid g4">${DATA.sell.map(s => `<article class="card sell"><div class="ib">${ico(s.icon)}</div><h3>${esc(s.t)}</h3><ul class="plain">${s.items.map(i => `<li>${esc(i)}</li>`).join('')}</ul></article>`).join('')}</div>
       <div class="metrics">${DATA.metrics.map(([a, b]) => `<div class="metric"><b>${esc(a)}</b><span>${esc(b)}</span></div>`).join('')}</div>`
   };
+
+  /* ---------- Resumen de cada pestaña ---------- */
+  const stripRing = frac => { const c = 2 * Math.PI * 22; return `<svg class="rg" viewBox="0 0 54 54" aria-hidden="true"><circle cx="27" cy="27" r="22" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="6"/><circle cx="27" cy="27" r="22" fill="none" stroke="var(--accent-hi)" stroke-width="6" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c * (1 - frac)}"/></svg>`; };
+  function sumBlock(tab) {
+    const cfg = DATA.summary[tab], st = S.sum[tab], items = cfg.items;
+    const fval = tab === 'agente' ? String(st.week) : st.phase;
+    const act = it => (tab === 'agente' ? (+fval === 0 || it.week <= +fval) : (fval === 'todo' || it.phase === fval));
+    let n = 0, mn = 0, mx = 0;
+    items.forEach(i => { if (act(i)) { n++; if (i.cost) { mn += i.cost[0]; mx += i.cost[1]; } } });
+    const have = items.filter(i => st.have[i.k]).length, tot = items.length;
+    const filt = `<div class="segc" role="group" aria-label="Filtrar el resumen">${cfg.filter.map(([v, l]) => `<button data-act="sumf" data-tab="${tab}" data-v="${v}" aria-pressed="${v === fval}">${esc(l)}</button>`).join('')}</div>`;
+    const tiles = items.map(i => { const on = !!st.have[i.k]; return `<button class="tile${on ? ' have' : ''}${act(i) ? '' : ' off'}" data-act="have" data-tab="${tab}" data-k="${i.k}" aria-pressed="${on}"><span class="ck">${ico('check')}</span><span class="ib">${ico(i.icon)}</span><span class="tt"><b>${esc(i.t)}</b><small>${esc(i.need)}</small></span><span class="meta"><span class="chip">${esc(i.tag)}</span>${i.week ? `<span class="chip">Semana ${i.week}</span>` : ''}${i.cost ? `<span class="chip">US$${i.cost[0]}–${i.cost[1]}</span>` : ''}</span></button>`; }).join('');
+    const strip = `<div class="strip"><div><div><b>${n}</b><span>${esc(cfg.nLabel)}</span></div></div><div><div><b>${mx ? rng(mn, mx) : 'US$0'}</b><span>${esc(cfg.costLabel)}</span></div></div><div>${stripRing(have / tot)}<div><b>${have}/${tot}</b><span>${esc(cfg.haveLabel)}</span></div></div></div>`;
+    return `<div class="sum-top">${filt}<span class="sum-hint">${esc(cfg.hint)}</span></div><div class="tiles">${tiles}</div>${strip}`;
+  }
+  const refreshSum = () => ['sumAgente', 'sumPlataforma', 'sumPaquetes'].forEach(n => { if ($('#c-' + n)) refresh(n); });
 
   /* ---------- Lista de pendientes (con anillo de avance) ---------- */
   const todoHTML = t => {
@@ -164,7 +198,7 @@
     const tr = $('#tr-' + t), tn = $('#tn-' + t);
     if (tr) tr.setAttribute('stroke-dashoffset', c * (1 - d / tot));
     if (tn) tn.textContent = d + '/' + tot;
-    renderTabs();
+    renderTabs(); refreshSum();
   }
 
   /* ---------- Armador de paquetes ---------- */
@@ -206,6 +240,7 @@
       if (sb) sb.textContent = `costo ${rng(r.tmin, r.tmax)} · ${r.h.toFixed(1).replace('.', ',')} h`;
     }
     const cards = $('#pk-cards'); if (cards) cards.innerHTML = pkCards();
+    refreshSum();
   }
   const armador = () => `<div class="banner">${ico('alert')}<span><b>Supuestos para jugar, no cifras medidas.</b> Los costos por funcionalidad, las horas y la tarifa son un punto de partida. Cámbialos y, tras el piloto, reemplázalos con los reales. Todo lo que cambies se guarda en este navegador.</span></div>
     <div class="ctrls"><label>Tarifa por hora de supervisión (US$)<input type="number" min="0" step="1" data-pkg="tarifa" value="${S.pk.tarifa}"></label><label>Margen objetivo (%)<input type="number" min="0" max="90" step="1" data-pkg="margen" value="${S.pk.margen}"></label><label>TRM en COP por US$ (opcional)<input type="number" min="0" step="10" data-pkg="trm" value="${S.pk.trm}" placeholder="Ej. el dólar de hoy"></label><button class="btn" data-act="pkreset">Restablecer supuestos</button></div>
@@ -223,7 +258,8 @@
       + sec('a-memoria', 'Pieza 4 · Memoria', 'La memoria: aprende de lo que apruebas', comp('memory'), 'Cada decisión tuya mejora al agente, siempre con una persona que revisa lo aprendido.')
       + sec('a-habilidades', 'Habilidades', 'Las seis cosas que sabe hacer', comp('skills'), 'Toca una habilidad para ver qué hace, qué necesita y cuánto cuesta.')
       + sec('a-reglas', 'Pieza 5 · Reglas', 'Qué puede hacer solo y qué no', comp('levels'))
-      + sec('a-pendientes', 'Pendientes', 'Qué falta para encender el agente', todoHTML('agente')),
+      + sec('a-pendientes', 'Pendientes', 'Qué falta para encender el agente', todoHTML('agente'))
+      + sec('a-resumen', 'Resumen', DATA.summary.agente.title, comp('sumAgente')),
 
     plataforma: () => hero('plataforma')
       + sec('p-capas', 'Arquitectura', 'La plataforma en seis capas', comp('layers'), 'Las capas de abajo sostienen el piloto. Las de arriba se construyen después, con los resultados en la mano.')
@@ -233,13 +269,15 @@
       + sec('p-cobros', 'Negocio', 'Cobrar y cumplir', COMP.pay())
       + sec('p-ruta', 'Hoja de ruta', 'De la planeación al lanzamiento', comp('road'))
       + sec('p-riesgos', 'Riesgos', 'Qué puede salir mal y cómo se reduce', comp('risks'))
-      + sec('p-pendientes', 'Pendientes', 'Qué falta para tener la plataforma lista', todoHTML('plataforma')),
+      + sec('p-pendientes', 'Pendientes', 'Qué falta para tener la plataforma lista', todoHTML('plataforma'))
+      + sec('p-resumen', 'Resumen', DATA.summary.plataforma.title, comp('sumPlataforma')),
 
     paquetes: () => hero('paquetes')
       + sec('k-funciones', 'Catálogo', 'Todo lo que puedes darle al cliente', COMP.feats(), 'Cada funcionalidad viene de una habilidad del agente. Esto es lo que se reparte entre los paquetes.')
       + sec('k-armador', 'Armador', 'Define los paquetes y mira su precio', armador(), 'Cambia el nombre de cada paquete, enciende funcionalidades y ajusta marcas y piezas.')
       + sec('k-venta', 'Venta', 'Cómo se vende', COMP.sell())
       + sec('k-pendientes', 'Pendientes', 'Qué falta para poder vender', todoHTML('paquetes'))
+      + sec('k-resumen', 'Resumen', 'Lo que necesitas para definir los paquetes', comp('sumPaquetes'))
   };
 
   /* ---------- Render y navegación ---------- */
@@ -288,7 +326,7 @@
   function refresh(name, id) {
     const box = $('#' + (id || 'c-' + name)); if (!box) return;
     const a = document.activeElement; let key = null;
-    if (a && a.dataset && a.dataset.act && box.contains(a)) key = `[data-act="${a.dataset.act}"]` + (a.dataset.i != null ? `[data-i="${a.dataset.i}"]` : '') + (a.dataset.id ? `[data-id="${a.dataset.id}"]` : '');
+    if (a && a.dataset && a.dataset.act && box.contains(a)) key = `[data-act="${a.dataset.act}"]` + (a.dataset.i != null ? `[data-i="${a.dataset.i}"]` : '') + (a.dataset.id ? `[data-id="${a.dataset.id}"]` : '') + (a.dataset.k ? `[data-k="${a.dataset.k}"]` : '') + (a.dataset.f ? `[data-f="${a.dataset.f}"]` : '') + (a.dataset.v != null ? `[data-v="${a.dataset.v}"]` : '') + (a.dataset.tab ? `[data-tab="${a.dataset.tab}"]` : '');
     box.innerHTML = COMP[name]();
     if (key) { const el = $(key, box); if (el) el.focus({ preventScroll: true }); }
   }
@@ -313,6 +351,9 @@
       const nb = $(`[data-act="cell"][data-f="${f}"][data-p="${p}"]`); if (nb) nb.focus({ preventScroll: true });
       updatePk();
     }
+    else if (a === 'sumf') { const t = el.dataset.tab; if (t === 'agente') S.sum.agente.week = el.dataset.v; else S.sum.plataforma.phase = el.dataset.v; save(); refresh(t === 'agente' ? 'sumAgente' : 'sumPlataforma'); }
+    else if (a === 'have') { const t = el.dataset.tab, k = el.dataset.k; S.sum[t].have[k] = !S.sum[t].have[k]; save(); refresh(t === 'agente' ? 'sumAgente' : 'sumPlataforma'); }
+    else if (a === 'fi') { S.sum.paquetes.sel = S.sum.paquetes.sel === el.dataset.f ? null : el.dataset.f; save(); refresh('sumPaquetes'); }
     else if (a === 'pkreset') {
       S.pk = clone(DATA.pkDefaults); save();
       $('#k-armador').outerHTML = sec('k-armador', 'Armador', 'Define los paquetes y mira su precio', armador(), 'Cambia el nombre de cada paquete, enciende funcionalidades y ajusta marcas y piezas.');
