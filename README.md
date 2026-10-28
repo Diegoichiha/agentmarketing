@@ -13,7 +13,7 @@ Documento de trabajo y confidencial. Los precios son estimaciones de octubre de 
 - Los pendientes y el armador se guardan en el navegador de cada persona.
 
 ## Vista previa del dashboard
-La pestaña Plataforma tiene el botón "Ver preview del dashboard", que abre `dashboard/index.html`: el diseño del portal del cliente con la marca de SAM Digital. Usa un cliente ficticio (Café Alba) y datos de ejemplo. Los cambios que se hagan allí se guardan solo en el navegador.
+La pestaña Plataforma tiene el botón "Ver preview del dashboard", que abre `dashboard/index.html`: el diseño del portal del cliente con la marca de SAM Digital. Toma como ejemplo a un cliente de SAM Digital, Tapetes y Pisos del Pacífico: su marca y los datos públicos de su sitio e Instagram son reales; las publicaciones nuevas y las cifras son de ejemplo. Los cambios que se hagan allí se guardan solo en el navegador.
 
 ## Archivos
 - `index.html`: la página.
