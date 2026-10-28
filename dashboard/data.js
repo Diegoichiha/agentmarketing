@@ -54,7 +54,21 @@ const ICONS = {
   leaf: '<path d="M5 20c0-9 5-14 14-15 0 9-5 14-14 15z"/><path d="M5 20 13 12"/>',
   trophy: '<path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5a2 2 0 0 0 2 4M16 6h3a2 2 0 0 1-2 4M12 13v4M9 20h6"/>',
   info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
-  drag: '<path d="M12 3v18M3 12h18M12 3l-3 3M12 3l3 3M12 21l-3-3M12 21l3-3M3 12l3-3M3 12l3 3M21 12l-3-3M21 12l-3 3"/>'
+  drag: '<path d="M12 3v18M3 12h18M12 3l-3 3M12 3l3 3M12 21l-3-3M12 21l3-3M3 12l3-3M3 12l3 3M21 12l-3-3M21 12l-3 3"/>',
+  phone: '<path d="M6.5 3.5h3l1.5 4-2 1.3a10 10 0 0 0 5.2 5.2l1.3-2 4 1.5v3a2 2 0 0 1-2.2 2A15.5 15.5 0 0 1 4.5 5.7a2 2 0 0 1 2-2.2z"/>',
+  pin: '<path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/>',
+  eye: '<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>',
+  link: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
+  star: '<path d="m12 3.5 2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 17l-5.2 2.7 1-5.9L3.5 9.7l5.9-.8z"/>',
+  building: '<rect x="5" y="3.5" width="14" height="17" rx="1.5"/><path d="M9 8h2M13 8h2M9 12h2M13 12h2M10 20.5v-4h4v4"/>',
+  file: '<path d="M7 3.5h7l4 4v13H7z"/><path d="M14 3.5v4h4M9.5 12h5M9.5 15.5h5"/>',
+  refresh: '<path d="M20 11a8 8 0 0 0-14-4.5L4 9"/><path d="M4 4v5h5"/><path d="M4 13a8 8 0 0 0 14 4.5L20 15"/><path d="M20 20v-5h-5"/>',
+  pause: '<path d="M8 5v14M16 5v14"/>',
+  trash: '<path d="M4.5 7h15M9.5 7V4.5h5V7M6.5 7l1 13h9l1-13M10 11v6M14 11v6"/>',
+  archive: '<rect x="3.5" y="4.5" width="17" height="4.5" rx="1"/><path d="M5 9v10h14V9M10 13h4"/>',
+  kanban: '<rect x="3.5" y="4" width="5" height="16" rx="1.2"/><rect x="10" y="4" width="5" height="10" rx="1.2"/><rect x="16.5" y="4" width="4" height="13" rx="1.2"/>',
+  minus: '<path d="M5 12h14"/>',
+  flag: '<path d="M5.5 21V4M5.5 5h11l-2 4 2 4h-11"/>'
 };
 
 /* ---------- Fechas relativas a hoy ---------- */
@@ -255,6 +269,94 @@ const REPLIES = [
   { re: /(newsletter|correo|email|boletin|boletín)/i, t: 'Perfecto. Preparo un borrador y no envío nada hasta que lo apruebes.', go: ['aprobaciones', 'Ver borradores'] },
   { re: /(resultado|alcance|métrica|metrica|cómo vamos|como vamos)/i, t: 'En 30 días tu alcance subió 27 % y las interacciones 31 %. Lo que mejor funcionó: los carruseles.', go: ['resultados', 'Ver resultados'] },
   { re: /(calendario|semana|agenda|programa)/i, t: 'Esta semana tienes 4 piezas programadas y 5 por decidir. Mañana toca publicar.', go: ['calendario', 'Ver calendario'] },
-  { re: /(marca|memoria|aprend|tono)/i, t: 'Aprendí 6 cosas de tus decisiones. 3 están por revisar.', go: ['marca', 'Revisar memoria'] }
+  { re: /(marca|memoria|aprend|tono)/i, t: 'Aprendí 6 cosas de tus decisiones. 3 están por revisar.', go: ['marca', 'Revisar memoria'] },
+  { re: /(prospect|cliente nuevo|seguimiento)/i, t: 'Tienes 13 prospectos. 4 tienen datos de contacto y aún sin borrador. Puedo prepararlos.', go: ['prospectos', 'Ver prospectos'] },
+  { re: /(google|seo|posici|palabra)/i, t: 'En Google subiste en 4 de tus 8 palabras. Hay 3 que están cerca de la primera página.', go: ['google', 'Ver Google'] },
+  { re: /(campa)/i, t: 'Tienes 4 campañas activas y 1 propuesta mía esperando. Puedes pausar, editar o activar desde Campañas.', go: ['campanas', 'Ver campañas'] }
 ];
 const REPLY_DEFAULT = 'Entendido. Lo preparo y te cuento. Nada sale sin tu aprobación.';
+
+/* ---------- Gestión · datos de ejemplo (la estructura del sitio y todas las cifras son inventadas) ---------- */
+const CAMP_ST = {
+  activa: { label: 'Activa', tone: 'ok', icon: 'play' }, pausada: { label: 'Pausada', tone: 'idle', icon: 'pause' },
+  propuesta: { label: 'Propuesta de Sami', tone: 'info', icon: 'spark' }, terminada: { label: 'Terminada', tone: 'idle', icon: 'check' }, archivada: { label: 'Archivada', tone: 'idle', icon: 'archive' }
+};
+const GOALS = [['target', 'Más cotizaciones'], ['eye', 'Más visitas'], ['search', 'Subir en Google'], ['users', 'Más clientes por proyecto'], ['trophy', 'Generar confianza'], ['heart', 'Más seguidores']];
+const CAMPAIGNS = [
+  { id: 'c1', t: 'Renueva antes de diciembre', icon: 'spark', goal: 0, st: 'activa', from: -9, to: 38, pcs: ['p3', 'p2', 'p9'] },
+  { id: 'c2', t: 'Pisos de vinilo', icon: 'layers', goal: 1, st: 'activa', from: -20, to: 14, pcs: ['p1', 'p11', 'p13', 'p7'] },
+  { id: 'c3', t: 'Servicios con página propia', icon: 'globe', goal: 2, st: 'activa', from: -5, to: 30, pcs: ['p4'] },
+  { id: 'c4', t: 'Arquitectos y constructoras', icon: 'building', goal: 3, st: 'activa', from: -3, to: 60, pcs: ['p5'] },
+  { id: 'c5', t: 'Casos de éxito', icon: 'trophy', goal: 4, st: 'propuesta', from: 4, to: 40, pcs: ['p14'] },
+  { id: 'c6', t: 'Grama para terrazas', icon: 'leaf', goal: 1, st: 'pausada', from: -30, to: 6, pcs: ['p8'] }
+];
+
+const WEB_ST = { viva: { label: 'En vivo', tone: 'ok' }, borrador: { label: 'Borrador', tone: 'idle' }, oculta: { label: 'Oculta', tone: 'idle' }, revision: { label: 'Por revisar', tone: 'warn' } };
+const WEB_PAGES = [
+  { id: 'w1', t: 'Inicio', path: '/', icon: 'home', st: 'viva', visits: 860, pos: 4, upd: 12, mt: 'Tapetes y Pisos del Pacífico · Cali', md: 'Alfombras, pisos de vinilo, persianas y grama sintética en Cali. Más de 30 años de experiencia.' },
+  { id: 'w2', t: 'Alfombras', path: '/alfombras', icon: 'rug', st: 'viva', visits: 310, pos: 6, upd: 20, mt: 'Alfombras en Cali', md: 'Alfombras para hogar y oficina, con instalación.' },
+  { id: 'w3', t: 'Pisos de vinilo', path: '/pisos-de-vinilo', icon: 'layers', st: 'viva', visits: 290, pos: 8, upd: 9, mt: 'Pisos de vinilo en Cali', md: 'Pisos de vinilo resistentes y fáciles de limpiar.' },
+  { id: 'w4', t: 'Persianas', path: '/persianas', icon: 'blinds', st: 'viva', visits: 180, pos: 15, upd: 45, mt: 'Persianas en Cali', md: '' },
+  { id: 'w5', t: 'Grama sintética', path: '/grama-sintetica', icon: 'leaf', st: 'viva', visits: 120, pos: 9, upd: 60, mt: 'Grama sintética en Cali', md: '' },
+  { id: 'w6', t: 'Guardaescobas y terminados', path: '/terminados', icon: 'ruler', st: 'borrador', visits: 0, pos: null, upd: 3, mt: 'Terminados para tus pisos', md: '' },
+  { id: 'w7', t: 'Casos de éxito', path: '/casos', icon: 'trophy', st: 'viva', visits: 60, pos: null, upd: 90, mt: 'Casos de éxito', md: '' },
+  { id: 'w8', t: 'Blog', path: '/blog', icon: 'book', st: 'viva', visits: 95, pos: 22, upd: 30, mt: 'Blog de pisos y decoración', md: 'Guías y consejos para tus espacios.' },
+  { id: 'w9', t: 'Contacto', path: '/contacto', icon: 'phone', st: 'viva', visits: 140, pos: null, upd: 120, mt: 'Contacto', md: 'Escríbenos o cotiza por WhatsApp.' },
+  { id: 'w10', t: 'Lavado y cristalizado de pisos', path: '/servicios/pisos', icon: 'ruler', st: 'revision', piece: 'p4', visits: 0, pos: null, upd: 0, mt: 'Lavado y cristalizado de pisos', md: '' },
+  { id: 'w11', t: 'Promoción de temporada', path: '/promo', icon: 'flame', st: 'oculta', visits: 0, pos: null, upd: 200, mt: 'Promoción', md: '' }
+];
+
+const MAIL_STEPS = [['users', 'Audiencia'], ['search', 'Contactos'], ['edit', 'Textos'], ['send', 'Lanzar'], ['msg', 'Respuestas']];
+const AUD_ST = { activa: { label: 'Activa', tone: 'ok' }, pausada: { label: 'Pausada', tone: 'idle' }, borrador: { label: 'Borrador', tone: 'info' } };
+const AUDIENCES = [
+  { id: 'a1', t: 'Arquitectos y constructoras', who: 'Estudios y constructoras', where: 'Cali', offer: 'Cotización de pisos para proyectos', step: 0, st: 'activa', found: 0, goal: 40, replies: 0 },
+  { id: 'a2', t: 'Clínicas y oficinas', who: 'Clínicas y oficinas corporativas', where: 'Cali', offer: 'Pisos resistentes para alto tráfico', step: 2, st: 'activa', found: 28, goal: 40, replies: 0 },
+  { id: 'a3', t: 'Hoteles boutique', who: 'Hoteles y hostales', where: 'Cali', offer: 'Alfombras y vinilo para habitaciones', step: 4, st: 'activa', found: 15, goal: 15, replies: 3 },
+  { id: 'a4', t: 'Conjuntos residenciales', who: 'Administradores de conjuntos', where: 'Cali', offer: 'Mantenimiento de persianas y zonas comunes', step: 1, st: 'pausada', found: 6, goal: 30, replies: 0 }
+];
+const MAIL_LISTS = ['Clientes', 'Prospectos', 'Arquitectos y constructoras'];
+const MAIL_ST = { borrador: ['Borrador', 'idle', 'edit'], porDecidir: ['Por decidir', 'warn', 'inbox'], programado: ['Programado', 'ok', 'calendar'], enviado: ['Enviado', 'idle', 'send'], auto: ['Automático', 'info', 'bolt'], pausado: ['Pausado', 'idle', 'pause'] };
+const MAILS = [
+  { id: 'm1', t: 'Renueva tus espacios antes de diciembre', piece: 'p3', to: 'Clientes', n: 212 },
+  { id: 'm2', t: 'Confirmación de cotización', piece: 'p9', auto: true, to: 'Quien cotiza', n: 0 },
+  { id: 'm3', t: 'Novedades de octubre', sent: true, off: -12, to: 'Clientes', n: 212, open: 41, click: 6 },
+  { id: 'm4', t: 'Catálogo de persianas', sent: true, off: -40, to: 'Clientes', n: 205, open: 38, click: 4 }
+];
+const REP_TAGS = { interesado: ['Interesado', 'ok', 'heart'], despues: ['Más adelante', 'warn', 'clock'], no: ['No por ahora', 'idle', 'x'] };
+const MAIL_REPLIES = [
+  { id: 'r1', from: 'Hotel boutique · Centenario', snip: '¿Pueden cotizar 12 habitaciones en vinilo?', tag: 'interesado', ago: 0, lead: 'l5' },
+  { id: 'r2', from: 'Hotel · San Antonio', snip: 'Retomamos en enero, escríbannos entonces.', tag: 'despues', ago: 1, lead: null },
+  { id: 'r3', from: 'Hostal · Granada', snip: 'Gracias, por ahora no necesitamos.', tag: 'no', ago: 2, lead: null }
+];
+
+const LEAD_STAGES = [['nuevo', 'Nuevo', 'users'], ['contactado', 'Contactado', 'msg'], ['reunion', 'Reunión', 'video'], ['propuesta', 'Propuesta', 'file'], ['ganado', 'Ganado', 'trophy']];
+const LEAD_SRC = { search: ['search', 'Búsqueda'], ig: ['image', 'Instagram'], ref: ['users', 'Recomendado'], web: ['globe', 'Sitio web'], mail: ['mail', 'Correo'] };
+const LEADS = [
+  { id: 'l1', n: 'Estudio de arquitectura', k: 'Granada', fit: 92, src: 'search', stage: 'nuevo', ct: '+57 3•• ••• ••41', draft: true, next: 1, note: '' },
+  { id: 'l2', n: 'Constructora de vivienda', k: 'Ciudad Jardín', fit: 88, src: 'search', stage: 'nuevo', ct: '+57 3•• ••• ••08', draft: false, next: null, note: '' },
+  { id: 'l3', n: 'Clínica odontológica', k: 'San Fernando', fit: 81, src: 'search', stage: 'reunion', ct: '+57 3•• ••• ••72', draft: true, next: 0, note: 'Pidió ver muestras de vinilo.' },
+  { id: 'l4', n: 'Oficinas corporativas', k: 'Versalles', fit: 77, src: 'search', stage: 'contactado', ct: '+57 3•• ••• ••15', draft: true, next: 5, note: '' },
+  { id: 'l5', n: 'Hotel boutique', k: 'Centenario', fit: 70, src: 'mail', stage: 'contactado', ct: '+57 3•• ••• ••90', draft: true, next: 1, note: 'Quiere cotizar 12 habitaciones.' },
+  { id: 'l6', n: 'Colegio privado', k: 'Pance', fit: 74, src: 'web', stage: 'nuevo', ct: '', draft: false, next: null, note: '' },
+  { id: 'l7', n: 'Conjunto residencial', k: 'Ciudad Jardín', fit: 68, src: 'mail', stage: 'contactado', ct: '+57 3•• ••• ••33', draft: true, next: 4, note: '' },
+  { id: 'l8', n: 'Restaurante nuevo', k: 'Granada', fit: 63, src: 'ig', stage: 'nuevo', ct: '', draft: false, next: null, note: '' },
+  { id: 'l9', n: 'Inmobiliaria', k: 'Granada', fit: 79, src: 'ref', stage: 'propuesta', ct: '+57 3•• ••• ••56', draft: true, next: 3, note: 'Propuesta enviada para 6 apartamentos.' },
+  { id: 'l10', n: 'Gimnasio', k: 'San Fernando', fit: 58, src: 'ig', stage: 'nuevo', ct: '+57 3•• ••• ••27', draft: false, next: null, note: '' },
+  { id: 'l11', n: 'Oficina de abogados', k: 'Versalles', fit: 72, src: 'search', stage: 'ganado', ct: '+57 3•• ••• ••64', draft: true, next: null, note: '' },
+  { id: 'l12', n: 'Constructora pequeña', k: 'Pance', fit: 66, src: 'ref', stage: 'ganado', ct: '+57 3•• ••• ••19', draft: true, next: null, note: '' },
+  { id: 'l13', n: 'Cafetería', k: 'Centenario', fit: 51, src: 'ig', stage: 'perdido', ct: '+57 3•• ••• ••80', draft: true, next: null, note: 'Prefirió esperar al próximo año.' }
+];
+
+const SEO_MARKETS = [['co', 'Colombia · Español'], ['mx', 'México · Español'], ['es', 'España · Español'], ['us', 'Estados Unidos · English']];
+const SEO_KW = [
+  { id: 'k0', k: 'pisos de vinilo cali', page: '/pisos-de-vinilo', pos: 8, was: 14, vol: 590, hist: [18, 16, 15, 14, 12, 11, 9, 8] },
+  { id: 'k1', k: 'alfombras cali', page: '/alfombras', pos: 6, was: 7, vol: 480, hist: [9, 8, 8, 7, 7, 7, 6, 6] },
+  { id: 'k2', k: 'instalación de pisos cali', page: '/servicios/pisos', pos: 11, was: 19, vol: 210, hist: [25, 23, 21, 19, 17, 15, 13, 11] },
+  { id: 'k3', k: 'persianas cali', page: '/persianas', pos: 15, was: 22, vol: 390, hist: [24, 24, 22, 22, 20, 18, 16, 15] },
+  { id: 'k4', k: 'grama sintética cali', page: '/grama-sintetica', pos: 9, was: 9, vol: 320, hist: [11, 10, 10, 9, 9, 9, 9, 9] },
+  { id: 'k5', k: 'cristalizado de pisos cali', page: '', pos: 24, was: 27, vol: 170, hist: [30, 29, 28, 27, 26, 25, 25, 24] },
+  { id: 'k6', k: 'pisos laminados cali', page: '/pisos-de-vinilo', pos: 18, was: 16, vol: 260, hist: [14, 14, 15, 16, 16, 17, 18, 18] },
+  { id: 'k7', k: 'tapetes para oficina', page: '/alfombras', pos: 12, was: 12, vol: 140, hist: [13, 13, 12, 12, 12, 12, 12, 12] }
+];
+const SEO_STATS = { clicks: 480, clicksD: 18, imps: 12400, impsD: 11 };
+const SEO_ASKS = [['target', 'Palabras que casi ganas', 'Busca palabras donde estoy cerca de la primera página'], ['users', 'Compárate con un competidor', 'Compara mis posiciones con las de un competidor'], ['spark', 'Cómo te describe la IA', 'Revisa cómo describen mi marca ChatGPT y otros asistentes'], ['clock', 'Páginas lentas', 'Revisa qué páginas de mi sitio cargan lento'], ['edit', 'Qué escribir después', 'Sugiere contenido y palabras para el blog']];

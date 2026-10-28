@@ -11,25 +11,32 @@
   const isMobile = () => matchMedia('(max-width: 820px)').matches;
 
   const ROUTES = [
-    { id: 'inicio', label: 'Inicio', icon: 'home' },
-    { id: 'aprobaciones', label: 'Aprobar', icon: 'inbox' },
-    { id: 'calendario', label: 'Calendario', icon: 'calendar' },
-    { id: 'resultados', label: 'Resultados', icon: 'chart' },
-    { id: 'marca', label: 'Marca', icon: 'brand' },
-    { id: 'agente', label: 'Sami', icon: 'spark' }
+    { id: 'inicio', label: 'Inicio', icon: 'home', g: 'Trabajo' },
+    { id: 'aprobaciones', label: 'Aprobar', icon: 'inbox', g: 'Trabajo' },
+    { id: 'calendario', label: 'Calendario', icon: 'calendar', g: 'Trabajo' },
+    { id: 'campanas', label: 'Campañas', icon: 'flag', g: 'Trabajo' },
+    { id: 'resultados', label: 'Resultados', icon: 'chart', g: 'Trabajo' },
+    { id: 'web', label: 'Sitio web', icon: 'globe', g: 'Gestionar' },
+    { id: 'correo', label: 'Correo', icon: 'mail', g: 'Gestionar' },
+    { id: 'prospectos', label: 'Prospectos', icon: 'target', g: 'Gestionar' },
+    { id: 'google', label: 'Google', icon: 'search', g: 'Gestionar' },
+    { id: 'marca', label: 'Marca', icon: 'brand', g: 'Tu marca' },
+    { id: 'agente', label: 'Sami', icon: 'spark', g: 'Tu marca' }
   ];
+  const TABS = ['inicio', 'aprobaciones', 'calendario', 'resultados'];
+  const HOOK = {}, EXT = {};
   const FILTERS = [['todas', 'grid', 'Todas'], ['redes', 'image', 'Redes'], ['email', 'mail', 'Correo'], ['web', 'globe', 'Sitio'], ['leads', 'target', 'Prospectos']];
 
   /* ---------- Estado ---------- */
   const fresh = () => ({
     theme: null, collapsed: false, pc: {}, sel: null, filter: 'todas', checked: {}, stack: 0, calMonth: 0, calView: 'mes',
     calCh: { instagram: true, facebook: true, email: true, web: true, leads: true }, calPil: {}, period: '30', ser: { reach: true, inter: true },
-    memo: {}, au: {}, conns: {}, notifs: {}, chat: [], agentTab: 'chat', marcaTab: 'kit', mtk: {}, slide: {}, webv: {}
+    memo: {}, au: {}, conns: {}, notifs: {}, chat: [], agentTab: 'chat', marcaTab: 'kit', mtk: {}, slide: {}, webv: {}, g: {}
   });
   let S = fresh();
   try { const raw = JSON.parse(localStorage.getItem(LS) || 'null'); if (raw && typeof raw === 'object') Object.assign(S, raw); } catch (e) { /* sin almacenamiento */ }
   const save = () => { try { localStorage.setItem(LS, JSON.stringify(S)); } catch (e) { /* ignorar */ } };
-  const U = { route: 'inicio', sheet: null, drawer: false, pal: false, palQ: '', palI: 0, typing: false, changesFor: null, detailOpen: false, live: 0 };
+  const U = { route: 'inicio', sheet: null, drawer: false, pal: false, palQ: '', palI: 0, typing: false, changesFor: null, detailOpen: false, live: 0, mg: null };
 
   /* ---------- Piezas ---------- */
   const P = id => PIECES.find(p => p.id === id);
@@ -266,7 +273,7 @@
           <button class="btn" data-act="reset">${ico('undo', 'sm')} Restablecer la demo</button></div></div>`;
   };
 
-  VIEW.mas = () => `<div class="page-h"><div><span class="kick">Más</span><h1 class="title">Todo <em>el panel</em></h1></div></div><div class="more-grid">${[['marca', 'brand', 'Marca'], ['agente', 'spark', 'Sami'], ['ajustes', 'gear', 'Ajustes']].map(([r, i, t]) => `<a class="card mg" href="#/${r}">${ico(i, 'lg')}<b>${t}</b></a>`).join('')}</div>`;
+  VIEW.mas = () => `<div class="page-h"><div><span class="kick">Más</span><h1 class="title">Todo <em>el panel</em></h1></div></div><div class="more-grid">${ROUTES.filter(r => !TABS.includes(r.id)).concat([{ id: 'ajustes', label: 'Ajustes', icon: 'gear' }]).map(r => `<a class="card mg" href="#/${r.id}">${ico(r.icon, 'lg')}<b>${r.label}</b>${badges()[r.id] ? `<span class="bd">${badges()[r.id]}</span>` : ''}</a>`).join('')}</div>`;
 
   /* ---------- Chat de Sami ---------- */
   function ensureChat() { if (!S.chat.length) S.chat = [{ r: 'ag', t: `${greet()}. Soy ${CLIENT.agent.name}. Pídeme lo que necesites. Nada sale al público sin tu aprobación.` }]; }
@@ -305,6 +312,7 @@
         <div class="pal-list">${items.map((it, i) => (it.g ? `<div class="pal-g">${it.g}</div>` : `<button class="pal-i ${i === U.palI ? 'on' : ''}" data-act="pal-run" data-i="${i}">${ico(it.icon)}<span>${esc(it.t)}</span>${it.hint ? `<small>${esc(it.hint)}</small>` : ''}</button>`)).join('')}</div>
         <div class="pal-ft"><span><kbd>↑</kbd><kbd>↓</kbd></span><span><kbd>Enter</kbd></span><span><kbd>Esc</kbd></span></div></div></div>`;
     }
+    if (U.mg && HOOK.layer) html += HOOK.layer();
     $('#layer').innerHTML = html;
     const fab = $('.fab'); if (fab) fab.hidden = !!U.drawer;
   }
@@ -314,7 +322,7 @@
       { icon: 'check', t: 'Aprobar lo urgente', run: () => { const u = pending().filter(p => p.urgent); u.forEach(p => decide(p.id, 'approve', null, true)); toast(u.length ? `Aprobaste ${u.length}` : 'No hay urgentes'); render(true); } },
       { icon: document.documentElement.dataset.theme === 'dark' ? 'sun' : 'moon', t: 'Modo claro u oscuro', run: toggleTheme },
       { icon: 'undo', t: 'Restablecer la demo', run: resetDemo }
-    ];
+    ].concat(HOOK.pal ? HOOK.pal() : []);
     const ql = q.trim().toLowerCase(), f = a => !ql || a.t.toLowerCase().includes(ql);
     const out = [];
     const askItem = ql ? [{ icon: 'spark', t: `Pedirle a Sami: «${q.trim()}»`, hint: 'Enter', run: () => ask_(q.trim()) }] : [];
@@ -327,11 +335,11 @@
     return out;
   }
   const ask_ = q => { closeLayers(); ask(q); };
-  function openPalette(q = '') { U.pal = true; U.palQ = q; U.palI = firstSel(); renderLayers(); setTimeout(() => { const i = $('#pal-in'); if (i) { i.focus(); i.setSelectionRange(i.value.length, i.value.length); } }, 0); }
+  function openPalette(q = '') { U.pal = true; U.mg = null; U.palQ = q; U.palI = firstSel(); renderLayers(); setTimeout(() => { const i = $('#pal-in'); if (i) { i.focus(); i.setSelectionRange(i.value.length, i.value.length); } }, 0); }
   const firstSel = () => { const it = palItems(U.palQ); const i = it.findIndex(x => !x.g); return i < 0 ? 0 : i; };
-  function openDrawer(prefill) { const fd = $('.fab-dot'); if (fd) fd.remove(); U.drawer = true; U.sheet = null; U.pal = false; ensureChat(); renderLayers(); setTimeout(() => { const i = $('#drawer-in'); if (i) { if (prefill) i.value = prefill; i.focus(); } const m = $('#msgs-drawer'); if (m) m.scrollTop = m.scrollHeight; }, 0); }
-  function closeLayers() { U.sheet = null; U.drawer = false; U.pal = false; renderLayers(); }
-  const anyLayer = () => U.sheet || U.drawer || U.pal;
+  function openDrawer(prefill) { const fd = $('.fab-dot'); if (fd) fd.remove(); U.drawer = true; U.sheet = null; U.mg = null; U.pal = false; ensureChat(); renderLayers(); setTimeout(() => { const i = $('#drawer-in'); if (i) { if (prefill) i.value = prefill; i.focus(); } const m = $('#msgs-drawer'); if (m) m.scrollTop = m.scrollHeight; }, 0); }
+  function closeLayers() { U.sheet = null; U.drawer = false; U.pal = false; U.mg = null; renderLayers(); }
+  const anyLayer = () => U.sheet || U.drawer || U.pal || U.mg;
 
   /* ---------- Acciones ---------- */
   function decide(id, kind, note, silent) {
@@ -397,6 +405,7 @@
       toast: () => toast(el.dataset.m)
     };
     if (acts[a]) { if (el.tagName === 'A' && a !== 'close-layers') return; acts[a](); }
+    else if (EXT[a]) EXT[a](el, e);
   });
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') { if (anyLayer()) { closeLayers(); } return; }
@@ -457,17 +466,17 @@
   document.addEventListener('mouseout', e => { if (e.target.closest && e.target.closest('#chartwrap') && !(e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('#chartwrap'))) { const tip = $('#tip'); if (tip) tip.hidden = true; const hg = $('#hover'); if (hg) hg.style.display = 'none'; } });
 
   /* ---------- Estructura general ---------- */
-  function badges() { return { aprobaciones: pending().length, marca: MEMORY.filter(m => memSt(m) === 'por-revisar').length }; }
+  function badges() { return Object.assign({ aprobaciones: pending().length, marca: MEMORY.filter(m => memSt(m) === 'por-revisar').length }, HOOK.badges ? HOOK.badges() : {}); }
   function renderShell() {
     const b = badges();
     $('#side').innerHTML = `<div class="side-top"><img src="../assets/logo-sam-blanco.png" alt="SAM Digital" width="88" height="34"><button class="collapse" data-act="collapse" aria-label="Contraer menú">${ico('left', 'sm')}</button></div>
       <div class="client"><span class="avatar">${CLIENT.initials}</span><div><b>${esc(CLIENT.short)}</b><small>${esc(CLIENT.city)} · ${esc(CLIENT.plan.name)}</small></div></div>
-      <nav class="nav-list" aria-label="Principal">${ROUTES.map(r => `<a class="nav ${U.route === r.id ? 'on' : ''}" href="#/${r.id}" ${U.route === r.id ? 'aria-current="page"' : ''} title="${r.label}">${ico(r.icon)}<span class="lb">${r.label}</span>${b[r.id] ? `<span class="bd">${b[r.id]}</span>` : ''}</a>`).join('')}<div class="nav-sep"></div><a class="nav ${U.route === 'ajustes' ? 'on' : ''}" href="#/ajustes" title="Ajustes">${ico('gear')}<span class="lb">Ajustes</span></a></nav>
+      <nav class="nav-list" aria-label="Principal">${ROUTES.map((r, i) => `${i && ROUTES[i - 1].g === r.g ? '' : `<div class="nav-g ${i ? '' : 'first'}"><span>${r.g}</span></div>`}<a class="nav ${U.route === r.id ? 'on' : ''}" href="#/${r.id}" ${U.route === r.id ? 'aria-current="page"' : ''} title="${r.label}">${ico(r.icon)}<span class="lb">${r.label}</span>${b[r.id] ? `<span class="bd">${b[r.id]}</span>` : ''}</a>`).join('')}<div class="nav-sep"></div><a class="nav ${U.route === 'ajustes' ? 'on' : ''}" href="#/ajustes" title="Ajustes">${ico('gear')}<span class="lb">Ajustes</span></a></nav>
       <div class="side-foot"><div class="tg-card" title="También por Telegram">${ico('send')}<span>Telegram conectado</span></div></div>`;
     $('#top').innerHTML = `<button class="cmdk" data-act="cmdk" aria-label="Buscar o pedirle algo a Sami">${ico('search')}<span>Busca o pídele algo a Sami</span><kbd>Ctrl K</kbd></button>
       <div class="top-r"><span class="demo-tag">Vista previa</span><button class="live" data-act="agent" aria-label="Sami está trabajando"><i class="pulse"></i> ${ico('spark', 'sm')}</button><button class="icon-btn" data-act="bell" aria-label="${b.aprobaciones} cosas por decidir">${ico('bell')}${b.aprobaciones ? '<i class="dot"></i>' : ''}</button><button class="icon-btn" data-act="theme" aria-label="Cambiar modo claro u oscuro">${ico(document.documentElement.dataset.theme === 'dark' ? 'sun' : 'moon')}</button><span class="avatar" style="width:40px;height:40px;font-size:13px" title="${esc(CLIENT.user.name)}">${CLIENT.user.initials}</span></div>`;
-    const tb = [['inicio', 'home', 'Inicio'], ['aprobaciones', 'inbox', 'Aprobar'], ['calendario', 'calendar', 'Agenda'], ['resultados', 'chart', 'Números'], ['mas', 'grid', 'Más']];
-    $('#tabbar').innerHTML = tb.map(([r, i, l]) => `<a href="#/${r}" class="${U.route === r || (r === 'mas' && ['marca', 'agente', 'ajustes'].includes(U.route)) ? 'on' : ''}">${ico(i)}<span>${l}</span>${b[r] ? `<span class="bd">${b[r]}</span>` : ''}</a>`).join('');
+    const tb = [['inicio', 'home', 'Inicio'], ['aprobaciones', 'inbox', 'Aprobar'], ['calendario', 'calendar', 'Agenda'], ['resultados', 'chart', 'Números'], ['mas', 'grid', 'Más']], more = Object.keys(b).filter(k => !TABS.includes(k)).reduce((n, k) => n + b[k], 0);
+    $('#tabbar').innerHTML = tb.map(([r, i, l]) => `<a href="#/${r}" class="${U.route === r || (r === 'mas' && !TABS.includes(U.route)) ? 'on' : ''}">${ico(i)}<span>${l}</span>${r === 'mas' ? (more ? `<span class="bd">${more}</span>` : '') : b[r] ? `<span class="bd">${b[r]}</span>` : ''}</a>`).join('');
   }
   function render(keep) {
     const main = $('#main'), y = window.scrollY, det = $('#detail'), dy = det ? det.scrollTop : 0;
@@ -476,7 +485,7 @@
     if (!keep) { main.style.animation = 'none'; void main.offsetHeight; main.style.animation = ''; }
     renderShell();
     if (keep) { window.scrollTo(0, y); const d2 = $('#detail'); if (d2) d2.scrollTop = dy; }
-    document.title = ({ inicio: 'Inicio', aprobaciones: 'Aprobar', calendario: 'Calendario', resultados: 'Resultados', marca: 'Marca', agente: 'Sami', ajustes: 'Ajustes', mas: 'Más' }[U.route] || 'Panel') + ' · Panel SAM';
+    document.title = ((ROUTES.find(r => r.id === U.route) || {}).label || { ajustes: 'Ajustes', mas: 'Más' }[U.route] || 'Panel') + ' · Panel SAM';
   }
   function route() {
     const r = (location.hash.replace(/^#\/?/, '') || 'inicio').split('?')[0];
@@ -487,6 +496,7 @@
   window.addEventListener('hashchange', route);
   setInterval(() => { U.live++; const f = $('#feed'); if (f && !anyLayer()) f.innerHTML = feedHTML(); }, 6000);
 
+  if (window.GESTION) window.GESTION({ VIEW, HOOK, EXT, U, S: () => S, $, $$, esc, ico, clone, nf, dfmt, longDate, isoOf, isoOff, save, render, renderLayers, toast, ask, go, closeLayers, P, stOf, dateOf, chDot, spark, kindIcon, when, rel });
   applyTheme();
   $('#shell').classList.toggle('collapsed', !!S.collapsed);
   route();
