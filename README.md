@@ -12,8 +12,13 @@ Documento de trabajo y confidencial. Los precios son estimaciones de octubre de 
 - Abre `index.html` en el navegador. No necesita instalar nada.
 - Los pendientes y el armador se guardan en el navegador de cada persona.
 
+## Vista previa del dashboard
+La pestaña Plataforma tiene el botón "Ver preview del dashboard", que abre `dashboard/index.html`: el diseño del portal del cliente con la marca de SAM Digital. Usa un cliente ficticio (Café Alba) y datos de ejemplo. Los cambios que se hagan allí se guardan solo en el navegador.
+
 ## Archivos
 - `index.html`: la página.
 - `styles.css`: estilos.
 - `app.js`: pestañas e interacciones.
 - `data.js`: todo el contenido (textos, costos y funcionalidades). Es el archivo que se edita para cambiar el plan.
+- `dashboard/`: vista previa del portal del cliente (`index.html`, `dash.css`, `app.js` y `data.js` con los datos de ejemplo).
+- `assets/`: logo y favicon de SAM Digital.

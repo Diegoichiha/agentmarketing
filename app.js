@@ -41,9 +41,10 @@
   };
 
   /* ---------- Piezas reutilizables ---------- */
+  const previewCta = (small) => `<div class="cta-row"><a class="btn-cta${small ? ' sm' : ''}" href="dashboard/index.html" target="_blank" rel="noopener">${ico('eye')} Ver preview del dashboard ${ico('arrow')}</a>${small ? '' : '<span class="cta-note">Diseño del portal del cliente, con datos de ejemplo</span>'}</div>`;
   const hero = id => {
     const t = DATA.tabs.find(x => x.id === id);
-    return `<section class="hero"><div class="big" aria-hidden="true">${t.n}</div><span class="kick">${t.n} · ${esc(t.label)}</span><h1>${esc(t.t1)} <em>${esc(t.em)}</em></h1><p>${esc(t.lead)}</p><div class="stats">${DATA.stats[id].map(([n, l]) => `<div class="stat"><b>${n}</b><span>${esc(l)}</span></div>`).join('')}</div></section>`;
+    return `<section class="hero"><div class="big" aria-hidden="true">${t.n}</div><span class="kick">${t.n} · ${esc(t.label)}</span><h1>${esc(t.t1)} <em>${esc(t.em)}</em></h1><p>${esc(t.lead)}</p>${id === 'plataforma' ? previewCta() : ''}<div class="stats">${DATA.stats[id].map(([n, l]) => `<div class="stat"><b>${n}</b><span>${esc(l)}</span></div>`).join('')}</div></section>`;
   };
   const sec = (id, kick, title, body, sub) => `<section class="sec" id="${id}"><header class="sec-h"><span class="kick">${esc(kick)}</span><h2>${esc(title)}</h2>${sub ? `<p class="sub">${esc(sub)}</p>` : ''}</header>${body}</section>`;
   const comp = (name, cls = '') => `<div id="c-${name}" class="${cls}">${COMP[name]()}</div>`;
@@ -105,7 +106,7 @@
       const cur = DATA.layers[S.layer];
       return `<div class="pl"><div><div class="stack">${order.map(i => { const l = DATA.layers[i]; return `<button class="lay ${l.phase}" data-act="layer" data-i="${i}" aria-pressed="${i === S.layer}"><div class="ib">${ico(l.icon)}</div><div><b>${esc(l.name)}</b><small>${esc(l.sum)}</small></div><span class="chip ${l.phase === 'piloto' ? 'accent' : ''}">${l.phase === 'piloto' ? 'Piloto' : 'Después'}</span></button>`; }).join('')}</div>
         <div class="stack-axis"><span>↑ Lo que ve y paga el cliente</span><span>↓ Lo que sostiene todo</span></div></div>
-        <article class="card sk-det sticky-panel"><div class="ib">${ico(cur.icon)}</div><span class="chip ${cur.phase === 'piloto' ? 'accent' : ''}" style="margin-left:8px">${cur.phase === 'piloto' ? 'Parte del piloto' : 'Después del piloto'}</span><h3>${esc(cur.name)}</h3><p style="margin-top:6px">${esc(cur.sum)}</p><h4>Qué incluye</h4><ul class="plain">${cur.has.map(h => `<li>${esc(h)}</li>`).join('')}</ul><h4>Estado</h4><p>${esc(cur.status)}</p></article></div>`;
+        <article class="card sk-det sticky-panel"><div class="ib">${ico(cur.icon)}</div><span class="chip ${cur.phase === 'piloto' ? 'accent' : ''}" style="margin-left:8px">${cur.phase === 'piloto' ? 'Parte del piloto' : 'Después del piloto'}</span><h3>${esc(cur.name)}</h3><p style="margin-top:6px">${esc(cur.sum)}</p><h4>Qué incluye</h4><ul class="plain">${cur.has.map(h => `<li>${esc(h)}</li>`).join('')}</ul><h4>Estado</h4><p>${esc(cur.status)}</p>${cur.name === 'Portal del cliente' ? previewCta(true) : ''}</article></div>`;
     },
 
     servers: () => {

@@ -20,6 +20,7 @@ const ICONS = {
   route: '<circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.5 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.5"/>',
   alert: '<path d="M12 3 2.5 20h19z"/><path d="M12 10v4M12 17v.1"/>',
   check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
+  arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
   clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
   dollar: '<circle cx="12" cy="12" r="9"/><path d="M14.5 9.2c-.5-1-1.5-1.5-2.7-1.5-1.6 0-2.7.9-2.7 2.1 0 3 5.7 1.5 5.7 4.4 0 1.3-1.2 2.2-2.9 2.2-1.3 0-2.4-.6-2.9-1.7M12 6v1.7M12 16.3V18"/>',
   folder: '<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
@@ -162,7 +163,7 @@ const DATA = {
     { icon: 'lock', name: 'Cuentas y seguridad', phase: 'piloto', sum: 'Quién entra a qué, y con qué clave.', has: ['Cuentas propias del agente (Google, GitHub)', 'Tokens de GitHub limitados a cada repositorio', 'Claves en variables de entorno', 'OAuth de Google y Meta'], status: 'Por configurar en la semana 1.' },
     { icon: 'bot', name: 'Agentes por cliente', phase: 'piloto', sum: 'Un carril por marca.', has: ['Un bot de Telegram por cliente', 'Una carpeta de marca por cliente', 'Una memoria separada por cliente'], status: 'Se prueba primero con SAM Digital.' },
     { icon: 'eye', name: 'Consola de operador', phase: 'despues', sum: 'Revisar lo del agente antes de que lo vea el cliente.', has: ['Cola de aprobaciones internas', 'Registro de acciones', 'Pausa general y topes de gasto'], status: 'En el piloto se hace por Telegram. El panel propio llega después.' },
-    { icon: 'users', name: 'Portal del cliente', phase: 'despues', sum: 'Donde el cliente ve y aprueba sin hablar con el bot.', has: ['Aprobaciones y calendario', 'Incorporación guiada', 'Informe mensual'], status: 'Se decide después del piloto, con sus resultados.' },
+    { icon: 'users', name: 'Portal del cliente', phase: 'despues', sum: 'Donde el cliente ve y aprueba sin hablar con el bot.', has: ['Aprobaciones y calendario', 'Incorporación guiada', 'Informe mensual'], status: 'Se decide después del piloto, con sus resultados. El diseño ya está en progreso: míralo en la vista previa.' },
     { icon: 'card', name: 'Cobros y legal', phase: 'despues', sum: 'Suscripción, facturación y condiciones.', has: ['Pasarela de cobro recurrente', 'Facturación electrónica ante la DIAN', 'Términos, datos personales y autorizaciones'], status: 'Se prepara en paralelo, antes del primer cliente de pago.' }
   ],
 
