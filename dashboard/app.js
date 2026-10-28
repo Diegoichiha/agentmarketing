@@ -20,8 +20,10 @@
     { id: 'correo', label: 'Correo', icon: 'mail', g: 'Gestionar' },
     { id: 'prospectos', label: 'Prospectos', icon: 'target', g: 'Gestionar' },
     { id: 'google', label: 'Google', icon: 'search', g: 'Gestionar' },
+    { id: 'reuniones', label: 'Reuniones', icon: 'video', g: 'Gestionar' },
     { id: 'marca', label: 'Marca', icon: 'brand', g: 'Tu marca' },
-    { id: 'agente', label: 'Sami', icon: 'spark', g: 'Tu marca' }
+    { id: 'agente', label: 'Sami', icon: 'spark', g: 'Tu marca' },
+    { id: 'conexiones', label: 'Conexiones', icon: 'link', g: 'Tu marca' }
   ];
   const TABS = ['inicio', 'aprobaciones', 'calendario', 'resultados'];
   const HOOK = {}, EXT = {};
@@ -248,17 +250,20 @@
     const items = MEMORY.concat((S.mtk.extra || []).map((t, i) => ({ id: 'x' + i, icon: 'edit', t, src: ['edit', 'Lo dijiste tú'], st: 'confirmada' })));
     const mem = `<section class="card pad"><div class="teach"><input id="teach" type="text" placeholder="Enséñale algo a Sami" aria-label="Enséñale algo a Sami"><button class="btn pri" data-act="teach" aria-label="Enseñar">${ico('plus')}</button></div>
       ${items.map(m => { const st = memSt(m); return st === 'olvidada' ? '' : `<div class="mem"><span class="mi ${st === 'confirmada' ? 'ok' : 'warn'}">${ico(m.icon)}</span><div class="tx"><b>${esc(m.t)}</b><small>${ico(m.src[0], 'sm')} ${esc(m.src[1])}</small></div><div class="mbt">${st === 'por-revisar' ? `<button class="icon-btn ok" data-act="memo" data-id="${m.id}" data-v="confirmada" aria-label="Confirmar" title="Confirmar">${ico('check')}</button>` : `<span class="chip ok">${ico('check', 'sm')}</span>`}<button class="icon-btn" data-act="memo" data-id="${m.id}" data-v="olvidada" aria-label="Olvidar" title="Olvidar">${ico('x')}</button></div></div>`; }).join('')}</section>`;
+    const mtabs = [['kit', 'brand', 'Kit'], ['lib', 'layers', 'Archivos'], ['perfil', 'users', 'Perfil'], ['memoria', 'book', 'Memoria']];
+    if (!mtabs.some(t => t[0] === S.marcaTab)) S.marcaTab = 'kit';
+    const body = S.marcaTab === 'kit' ? kit : S.marcaTab === 'memoria' ? (HOOK.memHead ? HOOK.memHead() : '') + mem : HOOK.marca ? HOOK.marca(S.marcaTab) : '';
     return `<div class="page-h"><div><span class="kick">Marca</span><h1 class="title">Lo que Sami <em>sabe de tu marca</em></h1></div>
-        <div class="seg"><button data-act="marca-tab" data-v="kit" aria-pressed="${S.marcaTab === 'kit'}">${ico('brand', 'sm')} Kit</button><button data-act="marca-tab" data-v="memoria" aria-pressed="${S.marcaTab === 'memoria'}">${ico('book', 'sm')} Memoria${porRev ? ` <span class="chip warn" style="height:20px;padding:0 7px">${porRev}</span>` : ''}</button></div></div>${S.marcaTab === 'kit' ? kit : mem}`;
+        <div class="seg">${mtabs.map(([k, i, l]) => `<button data-act="marca-tab" data-v="${k}" aria-pressed="${S.marcaTab === k}">${ico(i, 'sm')} <span class="tl">${l}</span>${k === 'memoria' && porRev ? ` <span class="chip warn" style="height:20px;padding:0 7px">${porRev}</span>` : ''}</button>`).join('')}</div></div>${body}`;
   };
 
   VIEW.agente = () => {
-    const tabs = [['chat', 'msg', 'Chat'], ['act', 'clock', 'Actividad'], ['meet', 'video', 'Reuniones']];
+    const tabs = [['chat', 'msg', 'Chat'], ['act', 'clock', 'Actividad']];
+    if (S.agentTab !== 'act') S.agentTab = 'chat';
     let body = '';
     if (S.agentTab === 'chat') body = `<div class="agent-grid"><section class="card chatbox"><div class="msgs" id="msgs-page">${chatHTML()}</div>${sugsHTML()}<form class="chat-in" data-form="chat"><input name="q" type="text" placeholder="Pídele algo a Sami" autocomplete="off" aria-label="Mensaje para Sami"><button class="btn pri" type="submit" aria-label="Enviar">${ico('send')}</button></form></section>
       <section class="card pad"><div class="caps">${CAPS.map(([i, l]) => `<div class="cap">${ico(i)}<span>${l}</span></div>`).join('')}</div><a class="btn" style="margin-top:14px;width:100%" href="#/ajustes">${ico('shield', 'sm')} Autonomía</a></section></div>`;
-    else if (S.agentTab === 'act') body = `<section class="card pad"><div class="feed" id="feed">${feedHTML()}</div></section>`;
-    else body = `<div class="grid">${MEETINGS.map(m => `<article class="card meet"><h3>${ico('video')} ${esc(m.t)}</h3><small>${esc(m.d)}</small><div class="sums">${m.sum.map(([i, s]) => `<span class="chip">${ico(i, 'sm')} ${esc(s)}</span>`).join('')}</div><div style="margin-top:10px">${m.tasks.map((t, i) => { const k = m.id + i, on = !!S.mtk[k]; return `<button class="tk" role="checkbox" aria-checked="${on}" data-act="tk" data-k="${k}"><span class="chbox" style="pointer-events:none;${on ? 'background:var(--blue);border-color:var(--blue)' : ''}">${ico('check')}</span><span>${esc(t)}</span></button>`; }).join('')}</div></article>`).join('')}</div>`;
+    else body = `<section class="card pad"><div class="feed" id="feed">${feedHTML()}</div></section>`;
     return `<div class="page-h"><div><span class="kick">${esc(CLIENT.agent.role)}</span><h1 class="title">Habla con <em>${esc(CLIENT.agent.name)}</em></h1></div>
       <div class="seg">${tabs.map(([k, i, l]) => `<button data-act="agent-tab" data-v="${k}" aria-pressed="${S.agentTab === k}">${ico(i, 'sm')} ${l}</button>`).join('')}</div></div>${body}`;
   };
@@ -267,7 +272,7 @@
     const au = a => S.au[a.id] || a.def;
     return `<div class="page-h"><div><span class="kick">Ajustes</span><h1 class="title">Cuánto hace Sami <em>solo</em></h1></div></div>
       <div class="set-grid"><div class="grid"><section class="card pad">${AUTONOMY.map(a => `<div class="au"><div class="au-h"><span class="au-i">${ico(a.icon)}</span><b>${a.t}</b>${a.locked ? `<span class="chip">${ico('lock', 'sm')}</span>` : ''}<span class="au-s">${AUTONOMY_TXT[au(a)]}</span></div><div class="lvls3" role="radiogroup" aria-label="${a.t}">${AUTONOMY_LEVELS.map(([k, l, ic]) => `<button class="lvl" role="radio" aria-checked="${au(a) === k}" data-act="au" data-id="${a.id}" data-v="${k}" title="${l}" ${a.locked && k !== 'aprobar' ? 'disabled' : ''}>${ico(ic)}<span>${l}</span></button>`).join('')}</div></div>`).join('')}</section>
-        <section class="card pad"><div class="conns">${CONNECTIONS.map(c => { const on = c.id in S.conns ? S.conns[c.id] : c.on; return c.soon ? `<div class="cn2 off" title="${c.name}: pronto">${ico(c.icon)}<b>${c.name}</b><i class="st"></i></div>` : `<button class="cn2 ${on ? 'on' : 'off'}" data-act="conn" data-id="${c.id}" title="${c.name}: ${c.sub}" aria-pressed="${on}">${ico(c.icon)}<b>${c.name}</b><i class="st"></i></button>`; }).join('')}</div></section></div>
+        ${HOOK.connSummary ? HOOK.connSummary() : `<section class="card pad"><div class="conns">${CONNECTIONS.map(c => { const on = c.id in S.conns ? S.conns[c.id] : c.on; return c.soon ? `<div class="cn2 off" title="${c.name}: pronto">${ico(c.icon)}<b>${c.name}</b><i class="st"></i></div>` : `<button class="cn2 ${on ? 'on' : 'off'}" data-act="conn" data-id="${c.id}" title="${c.name}: ${c.sub}" aria-pressed="${on}">${ico(c.icon)}<b>${c.name}</b><i class="st"></i></button>`; }).join('')}</div></section>`}</div>
         <div class="grid"><section class="plan"><span class="kick">${ico('trophy', 'sm')} Plan</span><b>${CLIENT.plan.name}</b>${USAGE.map(([i, l, a, b]) => `<div class="meter"><div class="t"><span>${ico(i, 'sm')} ${l}</span><span>${a}/${b}</span></div><div class="tr"><i style="width:${a / b * 100}%"></i></div></div>`).join('')}<button class="btn pri" data-act="toast" data-m="Vista previa: aquí se compararían los planes.">${ico('arrow', 'sm')} Ver planes</button></section>
           <section class="card pad">${NOTIFS.map(([k, i, l, d]) => { const on = k in S.notifs ? S.notifs[k] : d; return `<div class="nrow"><span>${ico(i)} ${l}</span><button class="switch" role="switch" aria-checked="${on}" aria-label="${l}" data-act="notif" data-id="${k}"></button></div>`; }).join('')}</section>
           <button class="btn" data-act="reset">${ico('undo', 'sm')} Restablecer la demo</button></div></div>`;
@@ -496,7 +501,11 @@
   window.addEventListener('hashchange', route);
   setInterval(() => { U.live++; const f = $('#feed'); if (f && !anyLayer()) f.innerHTML = feedHTML(); }, 6000);
 
-  if (window.GESTION) window.GESTION({ VIEW, HOOK, EXT, U, S: () => S, $, $$, esc, ico, clone, nf, dfmt, longDate, isoOf, isoOff, save, render, renderLayers, toast, ask, go, closeLayers, P, stOf, dateOf, chDot, spark, kindIcon, when, rel });
+  if (window.GESTION) {
+    const api = { VIEW, HOOK, EXT, U, S: () => S, $, $$, esc, ico, clone, nf, dfmt, longDate, isoOf, isoOff, t12, save, render, renderLayers, toast, ask, go, closeLayers, P, stOf, dateOf, chDot, spark, kindIcon, when, rel };
+    const H = window.GESTION(api);
+    if (window.GESTION2) window.GESTION2(api, H);
+  }
   applyTheme();
   $('#shell').classList.toggle('collapsed', !!S.collapsed);
   route();

@@ -1,0 +1,75 @@
+/* Panel SAM · segunda parte de la gestión: archivos de marca, perfil, reuniones y conexiones. */
+.hint2 { color: var(--ink-3); font-size: 13px; font-weight: 600; margin: 0 0 10px; }
+.stiles.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.stile.static { cursor: default; } .stile.static:hover { border-color: var(--line); }
+.bars .bl-l { display: flex; align-items: center; gap: 6px; }
+.bars .bl-l .ico { color: var(--blue); }
+
+/* ---------- Archivos de marca ---------- */
+.lbs { margin-bottom: 14px; display: grid; gap: 14px; }
+.lbs.ready { border-color: color-mix(in srgb, var(--ok) 45%, var(--line-2)); }
+.lbs-h { display: flex; align-items: center; gap: 12px; }
+.lbs.ready .ci { background: var(--ok-bg); color: var(--ok); }
+.lbs-h .gct b { display: block; font-family: var(--f-display); font-weight: 900; font-size: 16.5px; line-height: 1.2; }
+.lbs-h small { display: block; color: var(--ink-3); font-weight: 700; }
+.lbs-steps { display: flex; flex-wrap: wrap; gap: 8px; }
+.lbp { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 999px; background: var(--surface-2); border: 1px dashed var(--line); color: var(--ink-2); font-weight: 700; font-size: 13px; }
+.lbp.ok { background: var(--ok-bg); border: 1px solid transparent; color: var(--ok); }
+.lbp em { font-style: normal; font-family: var(--f-num); font-size: 12px; }
+.glib { transition: border-color 0.15s, background 0.15s; }
+.glib.over { border-color: var(--orange); border-style: dashed; background: color-mix(in srgb, var(--orange) 8%, var(--surface)); }
+.glib:not(.has) { background: var(--surface-2); }
+.lbdrop { display: inline-flex; padding: 0 6px; }
+.it.fil { cursor: default; padding: 10px 16px; }
+.fic { width: 34px; height: 34px; border-radius: 10px; flex: none; display: grid; place-items: center; background: var(--surface-2); color: var(--blue); border: 1px solid var(--line-2); }
+.fic .ico { width: 18px; height: 18px; }
+.it.fil .tx b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ---------- Reuniones ---------- */
+.gmt.next { border-color: color-mix(in srgb, var(--cyan) 55%, var(--line-2)); }
+.swl2 { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; font-size: 13.5px; color: var(--ink-2); }
+.gmtk { display: grid; gap: 2px; }
+.gmtk .tkr { display: flex; align-items: center; gap: 6px; }
+.gmtk .tkr .tk { flex: 1; min-width: 0; }
+.gmtk .tkr .tk span:last-child { overflow-wrap: anywhere; }
+.gmtk .mini { margin-top: 6px; } .gmtk .mini input { flex: 1; width: auto; }
+
+/* ---------- Conexiones ---------- */
+.cx-stack { display: grid; gap: 16px; margin-bottom: 14px; }
+.gx2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.gcx { border: 1.5px solid var(--line-2); border-radius: 18px; padding: 14px; display: grid; gap: 12px; background: var(--surface); }
+.gcx.on { border-color: color-mix(in srgb, var(--ok) 40%, var(--line-2)); }
+.gcx-h { display: flex; align-items: center; gap: 12px; }
+.gcx-h .gct { flex: 1; min-width: 0; } .gcx-h .gct b { display: block; font-family: var(--f-display); font-weight: 900; font-size: 16px; } .gcx-h .gct small { color: var(--ink-3); font-weight: 700; }
+.gcx.on .ci { background: var(--ok-bg); color: var(--ok); }
+.perm { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 8px; }
+.gcx .perm { margin: 0; }
+.perm li { display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 700; color: var(--ink-2); }
+.perm li .ico { color: var(--blue); }
+.dns { margin-top: 14px; border-radius: 16px; padding: 12px; background: var(--surface-2); border: 1.5px dashed var(--line); display: grid; gap: 10px; }
+.dns.warn { background: var(--warn-bg); border-color: transparent; }
+.dns-h { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-weight: 700; } .dns-h .ico { color: var(--warn); } .dns:not(.warn) .dns-h .ico { color: var(--ok); }
+.dns.warn .dns-h { color: var(--warn); } .dns.warn .dns-h .dim { color: var(--warn); opacity: 0.8; }
+.dns-r { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.dnsb { display: grid; grid-template-columns: auto 1fr; column-gap: 8px; align-items: center; text-align: left; padding: 8px 10px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); }
+.dnsb .ico { grid-row: span 2; color: var(--warn); } .dnsb b { font-family: var(--f-num); font-size: 13px; font-weight: 600; } .dnsb small { color: var(--ink-3); font-size: 11.5px; line-height: 1.25; }
+.dnsb.ok { border-color: color-mix(in srgb, var(--ok) 45%, var(--line)); } .dnsb.ok .ico { color: var(--ok); }
+.cgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 12px; }
+.cn2 .cns { color: var(--ink-3); font-size: 11.5px; font-weight: 700; line-height: 1.2; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cn2.on .cns { color: var(--ok); }
+.cxsite { display: grid; gap: 8px; margin-bottom: 14px; }
+.rowkv { display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--ink); padding: 8px 12px; border-radius: 12px; background: var(--surface-2); } .rowkv .ico { color: var(--blue); } .rowkv span { overflow-wrap: anywhere; }
+.sitef { display: grid; gap: 4px; max-width: 520px; } .sitef .btn { justify-self: start; margin-top: 4px; }
+.cxsum .cxs { display: flex; align-items: baseline; gap: 8px; margin-bottom: 12px; }
+.cxsum .cxs b { font-family: var(--f-num); font-weight: 600; font-size: 34px; line-height: 1; } .cxsum .cxs b span { font-size: 16px; color: var(--ink-3); font-weight: 500; } .cxsum .cxs small { color: var(--ink-3); font-weight: 700; }
+.cdots { display: flex; flex-wrap: wrap; gap: 6px; }
+.cdot { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: var(--surface-2); color: var(--ink-3); border: 1px solid var(--line-2); opacity: 0.7; }
+.cdot.on { background: var(--ok-bg); color: var(--ok); border-color: transparent; opacity: 1; }
+.cx-av { margin-top: 10px; }
+
+@media (max-width: 1240px) { .stiles.four { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 820px) {
+  .gx2, .dns-r { grid-template-columns: minmax(0, 1fr); }
+  .cgrid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+}
+@media (max-width: 520px) { .cgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

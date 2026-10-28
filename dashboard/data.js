@@ -272,6 +272,8 @@ const REPLIES = [
   { re: /(marca|memoria|aprend|tono)/i, t: 'Aprendí 6 cosas de tus decisiones. 3 están por revisar.', go: ['marca', 'Revisar memoria'] },
   { re: /(prospect|cliente nuevo|seguimiento)/i, t: 'Tienes 13 prospectos. 4 tienen datos de contacto y aún sin borrador. Puedo prepararlos.', go: ['prospectos', 'Ver prospectos'] },
   { re: /(google|seo|posici|palabra)/i, t: 'En Google subiste en 4 de tus 8 palabras. Hay 3 que están cerca de la primera página.', go: ['google', 'Ver Google'] },
+  { re: /(reuni|meet|transcrip)/i, t: 'Tienes 2 reuniones próximas. Puedo entrar, tomar notas y dejarte las tareas listas.', go: ['reuniones', 'Ver reuniones'] },
+  { re: /(conect|integra|permiso)/i, t: 'Desde Conexiones decides a qué cuentas y apps puedo entrar. Puedes quitar el acceso cuando quieras.', go: ['conexiones', 'Ver conexiones'] },
   { re: /(campa)/i, t: 'Tienes 4 campañas activas y 1 propuesta mía esperando. Puedes pausar, editar o activar desde Campañas.', go: ['campanas', 'Ver campañas'] }
 ];
 const REPLY_DEFAULT = 'Entendido. Lo preparo y te cuento. Nada sale sin tu aprobación.';
@@ -360,3 +362,45 @@ const SEO_KW = [
 ];
 const SEO_STATS = { clicks: 480, clicksD: 18, imps: 12400, impsD: 11 };
 const SEO_ASKS = [['target', 'Palabras que casi ganas', 'Busca palabras donde estoy cerca de la primera página'], ['users', 'Compárate con un competidor', 'Compara mis posiciones con las de un competidor'], ['spark', 'Cómo te describe la IA', 'Revisa cómo describen mi marca ChatGPT y otros asistentes'], ['clock', 'Páginas lentas', 'Revisa qué páginas de mi sitio cargan lento'], ['edit', 'Qué escribir después', 'Sugiere contenido y palabras para el blog']];
+
+/* ---------- Fase 2: marca, reuniones y conexiones (ejemplos) ---------- */
+const BRAND_CATS = [
+  { id: 'logos', icon: 'brand', t: 'Logos', hint: 'Claro, oscuro y horizontal' },
+  { id: 'ident', icon: 'file', t: 'Guía de marca', hint: 'Colores, letras y reglas' },
+  { id: 'fotos', icon: 'image', t: 'Estilo de fotos', hint: 'Así queremos vernos' },
+  { id: 'reales', icon: 'building', t: 'Fotos reales', hint: 'Trabajos terminados para usar' },
+  { id: 'social', icon: 'heart', t: 'Publicaciones que te gustan', hint: 'Para copiar el estilo' },
+  { id: 'webref', icon: 'globe', t: 'Páginas que te gustan', hint: 'Capturas o PDF' },
+  { id: 'evitar', icon: 'x', t: 'Para evitar', hint: 'Así no queremos vernos' },
+  { id: 'textos', icon: 'edit', t: 'Textos aprobados', hint: 'Titulares y frases' },
+  { id: 'docs', icon: 'book', t: 'Documentos', hint: 'Catálogos y presentaciones' },
+  { id: 'serv', icon: 'layers', t: 'Servicios', hint: 'Qué vendes y a quién' }
+];
+const BRAND_MIN = [['logos', 'Un logo'], ['ident', 'La guía de marca'], ['fotos', '5 fotos de estilo', 5], ['social', '5 publicaciones que te gustan', 5]];
+const BRAND_FILES = [
+  { id: 'f1', cat: 'logos', n: 'logo-principal.svg', kb: 18, off: -30 },
+  { id: 'f2', cat: 'ident', n: 'guia-de-marca.pdf', kb: 2400, off: -30 },
+  { id: 'f3', cat: 'fotos', n: 'referencia-vinilo-1.jpg', kb: 640, off: -20 },
+  { id: 'f4', cat: 'fotos', n: 'referencia-vinilo-2.jpg', kb: 710, off: -20 },
+  { id: 'f5', cat: 'fotos', n: 'referencia-alfombra.jpg', kb: 580, off: -18 },
+  { id: 'f6', cat: 'serv', n: 'lista-de-servicios.pdf', kb: 310, off: -12 }
+];
+const NETS = [
+  ['instagram', 'Instagram', 'image', '@tapetes_y_pisos', true], ['facebook', 'Facebook', 'users', 'Tu página', true], ['tiktok', 'TikTok', 'play', '', false],
+  ['youtube', 'YouTube', 'video', '', false], ['linkedin', 'LinkedIn', 'building', '', false], ['x', 'X', 'msg', '', false], ['threads', 'Threads', 'msg', '', false],
+  ['pinterest', 'Pinterest', 'bookmark', '', false], ['gbusiness', 'Google Business', 'pin', '', false], ['whatsapp', 'WhatsApp', 'phone', '', false], ['telegram', 'Telegram', 'send', 'Bot de la marca', true]
+];
+const APPS = [
+  ['gsc', 'Search Console', 'search', 'Posiciones en Google', true], ['ga4', 'Google Analytics', 'chart', 'Visitas y compras', false], ['clarity', 'Microsoft Clarity', 'eye', 'Cómo navegan tu sitio', false],
+  ['mailchimp', 'Mailchimp', 'mail', 'Boletines', false], ['asana', 'Asana', 'list', 'Tareas y proyectos', false], ['outlook', 'Outlook', 'calendar', 'Correo y agenda', false], ['meet', 'Google Meet', 'video', 'Reuniones', false]
+];
+const DNS = [['spf', 'SPF', 'Quién puede enviar por tu dominio'], ['dkim', 'DKIM', 'Firma tus correos'], ['dmarc', 'DMARC', 'Qué hacer si algo falla']];
+const GCONN_DEFAULT = { gread: true, gsend: false, spf: true, dkim: false, dmarc: false };
+const HOSTS = ['Hostinger', 'Netlify', 'Vercel', 'GitHub Pages', 'Otro'];
+const MEETS = [
+  { id: 'r1', t: 'Constructora en Cali', off: -1, min: 34, sum: [['ruler', 'Piden cotizar vinilo'], ['calendar', 'Entrega en noviembre']], tasks: ['Enviar la cotización', 'Agendar visita técnica'] },
+  { id: 'r2', t: 'Catálogo de persianas', off: -6, min: 22, sum: [['blinds', 'Entran 2 colecciones nuevas']], tasks: ['Actualizar el sitio'] },
+  { id: 'r3', t: 'Proveedor de vinilo', off: -11, min: 18, sum: [['layers', 'Colores nuevos en diciembre']], tasks: ['Pedir muestras'] },
+  { id: 'r4', t: 'Visita al hotel boutique', off: 2, time: '10:00', link: 'meet.google.com/ejemplo-hotel', sami: true, tasks: ['Llevar muestras de vinilo'], sum: [] },
+  { id: 'r5', t: 'Reunión con la arquitecta', off: 5, time: '15:00', link: '', sami: false, tasks: [], sum: [] }
+];

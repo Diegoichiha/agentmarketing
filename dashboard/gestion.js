@@ -30,7 +30,7 @@ window.GESTION = function (A) {
 
   /* ---------- Piezas pequeñas de interfaz ---------- */
   const dshort = iso => (iso ? dfmt(iso, { day: 'numeric', month: 'short' }) : '');
-  const tag = (i, l, t = '') => `<span class="chip ${t}">${ico(i, 'sm')}${l == null || l === '' ? '' : esc(l)}</span>`;
+  const tag = (i, l, t = '') => `<span class="chip ${t}">${i ? ico(i, 'sm') : ''}${l == null || l === '' ? '' : esc(l)}</span>`;
   const sw = (on, act, attrs, label) => `<button class="switch" role="switch" aria-checked="${on}" aria-label="${esc(label)}" title="${esc(label)}" data-act="${act}" ${attrs}></button>`;
   const ib = (i, act, attrs, label, cls = '') => `<button class="icon-btn sm ${cls}" data-act="${act}" ${attrs} aria-label="${esc(label)}" title="${esc(label)}">${ico(i, 'sm')}</button>`;
   const pill = (i, html, c = '') => `<span class="pill ${c}">${ico(i, 'sm')}${html}</span>`;
@@ -285,7 +285,7 @@ window.GESTION = function (A) {
       const v = e[k] == null ? '' : e[k]; let inp;
       if (kind === 'area') inp = `<textarea data-f="${k}" rows="3">${esc(v)}</textarea>`;
       else if (kind === 'sel' || kind === 'seln') { const o = opts.slice(); if (!o.some(x => String(x[0]) === String(v))) o.push([v, (WEB_ST[v] || {}).label || v]); inp = `<select data-f="${k}" data-k="${kind}">${o.map(([a, b]) => `<option value="${esc(a)}" ${String(a) === String(v) ? 'selected' : ''}>${esc(b)}</option>`).join('')}</select>`; }
-      else inp = `<input data-f="${k}" type="${kind === 'date' ? 'date' : 'text'}" value="${esc(v)}" autocomplete="off">`;
+      else inp = `<input data-f="${k}" type="${kind === 'date' ? 'date' : kind === 'time' ? 'time' : 'text'}" value="${esc(v)}" autocomplete="off">`;
       return `<label class="fld"><span>${ico(ic, 'sm')} ${label}</span>${inp}</label>`;
     };
     const extras = mg.id ? F_.ex(e).map(([i, l, p, q], n) => `<button class="btn lg" type="button" data-act="g-sheet-ex" data-n="${n}">${ico(i, 'sm')} ${l}</button>`).join('') : '';
@@ -335,4 +335,7 @@ window.GESTION = function (A) {
     const c = e.target.closest && e.target.closest('.lcol'); if (!c) return; const d = e.dataTransfer.getData('text/plain'); if (d.indexOf('lead:') !== 0) return;
     e.preventDefault(); c.classList.remove('over'); const l = ent('lead', d.slice(5)); if (l && l.stage !== c.dataset.stage) patch('lead', l.id, { stage: c.dataset.stage }, `${l.n}: ${LEAD_STAGES.find(s => s[0] === c.dataset.stage)[1]}`);
   });
+
+  /* Lo que usa la segunda parte (marca, reuniones y conexiones) */
+  return { DATA, FORMS, gs, sub, F, Q, setF, ents, ent, patch, addEnt, refresh, tag, sw, ib, pill, pl, search, chips, select, newBtn, head, empty, dshort, comps, openSheet };
 };

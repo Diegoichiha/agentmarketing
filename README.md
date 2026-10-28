@@ -17,10 +17,12 @@ La pestaña Plataforma tiene el botón "Ver preview del dashboard", que abre `da
 
 Además de aprobar publicaciones, el panel tiene espacios para gestionar: Campañas, Sitio web, Correo (audiencias, boletines y respuestas), Prospectos (tablero y lista) y Google (palabras que se siguen). En cada uno se busca, filtra, crea, edita, pausa y mueve. La estructura del sitio, los prospectos y las cifras de esas secciones son de ejemplo.
 
+También se gestionan Reuniones (tareas, si Sami entra o no), Marca (archivos por categoría, perfil con redes y competidores, memoria) y Conexiones (Google en dos pasos, redes, sitio y apps). En Archivos solo se guardan los nombres: no se sube nada.
+
 ## Archivos
 - `index.html`: la página.
 - `styles.css`: estilos.
 - `app.js`: pestañas e interacciones.
 - `data.js`: todo el contenido (textos, costos y funcionalidades). Es el archivo que se edita para cambiar el plan.
-- `dashboard/`: vista previa del portal del cliente (`index.html`, `dash.css`, `icons.css`, `gestion.css`, `app.js`, `gestion.js` y `data.js` con los datos de ejemplo).
+- `dashboard/`: vista previa del portal del cliente (`index.html`, `dash.css`, `icons.css`, `gestion.css`, `gestion2.css`, `app.js`, `gestion.js`, `gestion2.js` y `data.js` con los datos de ejemplo).
 - `assets/`: logo y favicon de SAM Digital.

@@ -4,7 +4,8 @@
 /* ---------- Menú agrupado ---------- */
 .side { gap: 10px; padding-top: 14px; padding-bottom: 12px; }
 .nav-list { gap: 1px; margin-top: 0; }
-.nav { height: 40px; font-size: 14px; }
+.nav { height: 38px; font-size: 14px; }
+.side .client { padding: 8px 10px; }
 .nav-g { font-family: var(--f-num); font-size: 10.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(241, 254, 255, 0.45); padding: 10px 12px 2px; }
 .nav-g.first { padding-top: 2px; }
 .shell.collapsed .nav-g { height: 1px; padding: 0; margin: 8px 10px; background: rgba(255, 255, 255, 0.12); }
